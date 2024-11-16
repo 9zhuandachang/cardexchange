@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>注册页面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .register-container {
+            width: 400px;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .register-container img {
+            width: 100px;
+            margin-bottom: 10px;
+        }
+
+        .register-container h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="password"],
+        .form-group input[type="email"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .verification-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .verification-group input[type="text"] {
+            flex: 1;
+        }
+
+        .verification-group button {
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            background-color: #f0f0f0;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .form-group .agreement {
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-group .agreement input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        .form-group .agreement a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #d9534f;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background-color: #c9302c;
+        }
+    </style>
+</head>
+<body>
+
+<div class="register-container">
+    <img src="logo.png" alt="Logo">
+    <h2>欢迎注册</h2>
+    <form id="registerForm">
+        <!-- 账号输入框 -->
+        <div class="form-group">
+            <label>账号</label>
+            <input type="text" id="username" placeholder="请输入账号" required>
+        </div>
+
+        <div class="form-group">
+            <label>邮箱地址</label>
+            <input type="email" id="email" placeholder="请输入邮箱地址" required>
+        </div>
+
+        <div class="form-group">
+            <label>设置密码</label>
+            <input type="password" id="password" placeholder="请输入密码" required>
+        </div>
+
+        <div class="form-group">
+            <label>确认密码</label>
+            <input type="password" id="confirmPassword" placeholder="请再次输入密码" required>
+        </div>
+
+        <div class="form-group verification-group">
+            <input type="text" id="verificationCode" placeholder="请输入验证码" required>
+            <button type="button" id="getVerificationCode">获取验证码</button>
+        </div>
+
+        <div class="form-group agreement">
+            <input type="checkbox" id="agreement" required>
+            <span>我已阅读并同意 <a href="#">《用户服务协议》</a> 和 <a href="#">《隐私政策》</a></span>
+        </div>
+
+        <button type="submit" class="submit-btn">立即注册</button>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    // 获取验证码按钮的点击事件
+    document.getElementById('getVerificationCode').addEventListener('click', function() {
+        const email = document.getElementById('email').value;
+        if (!email) {
+            alert('请输入邮箱地址');
+            return;
+        }
+        var formData = new FormData();
+// 将邮箱添加到 FormData 对象中
+        formData.append('email', email);
+
+// 调用后端接口发送验证码
+        axios.post('http://localhost:8080/users/sendcode', formData)
+            .then(function(response) {
+                if (response.data.code === 200) {
+                    alert('验证码已发送，请检查您的邮箱！');
+                } else {
+                    alert('验证码发送失败：' + response.data.message);
+                }
+            })
+            .catch(function(error) {
+                console.error('请求错误:', error);
+                alert('发送验证码失败，请稍后再试');
+            });
+    });
+
+    // 注册表单提交事件
+    document.getElementById('registerForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // 阻止默认的表单提交行为
+        const username = document.getElementById('username').value
+        const confirmPassword=document.getElementById('confirmPassword').value
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const verificationCode = document.getElementById('verificationCode').value;
+        const agreement = document.getElementById('agreement').checked;
+
+        // 验证输入
+        if (!email || !password || !confirmPassword || !verificationCode || !agreement) {
+            alert('请填写所有字段并同意协议');
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            alert('两次密码输入不一致');
+            return;
+        }
+
+        // 发送注册请求
+        axios.post('http://localhost:8080/users/register', {
+            username:username,
+            email: email,
+            password: password,
+            verificationCode: verificationCode
+        })
+            .then(function(response) {
+                if (response.data.code === 200) {
+                    alert('注册成功！');
+                    window.location.href = 'login.html'; // 注册成功后跳转到登录页面
+                } else {
+                    alert('注册失败：' + response.data.message);
+                }
+            })
+            .catch(function(error) {
+                console.error('注册请求错误:', error);
+                alert('注册请求失败，请稍后再试');
+            });
+    });
+</script>
+
+</body>
+</html>

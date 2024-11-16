@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Shop</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        nav input,
+        nav button {
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        nav button {
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .card-section {
+            display: flex;
+            gap: 2rem;
+            padding: 2rem;
+            background-color: #fff;
+            margin: 2rem 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-section img {
+            width: 50%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .card-info {
+            width: 50%;
+        }
+
+        .price span {
+            color: orange;
+            font-weight: bold;
+        }
+
+        .recommendations {
+            padding: 2rem;
+            background-color: #fff;
+            margin: 2rem 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .recommendations h2 {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .card {
+            flex-basis: calc(25% - 1rem);
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+        }
+
+        .card h3 {
+            font-size: 1.2rem;
+            margin: 1rem 0;
+            padding: 0 1rem;
+        }
+
+        .card p {
+            padding: 0 1rem;
+            color: #555;
+        }
+
+        .card .price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background-color: #f5f5f5;
+        }
+
+        .card .price button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .card .price button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+    <div class="logo">LOGO</div>
+    <nav>
+        <input type="text" placeholder="搜索名称、品牌、系列、年代、昵称">
+        <button>搜索</button>
+    </nav>
+</header>
+
+<main>
+    <section class="card-section">
+        <img src="theshy_card.jpg" alt="Theshy Card">
+        <div class="card-info">
+            <h2>挑战者 I级 WBG 登峰 THESHY_姜承録 无编</h2>
+            <ul>
+                <li><strong>发售时间:</strong> 2023年</li>
+                <li><strong>货号:</strong> 挑战者RISE.128登峰I级WBG</li>
+                <li><strong>系列名称:</strong> 挑战者</li>
+                <li><strong>战队:</strong> WBG</li>
+                <li><strong>平行:</strong> I级</li>
+                <li><strong>卡种:</strong> 登峰</li>
+            </ul>
+            <div class="price">
+                <span>最低售价: ¥4.9</span>
+                <button>购买</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="recommendations">
+        <h2>为您推荐</h2>
+        <div class="cards">
+            <div class="card">
+                <img src="card_image_1.jpg" alt="Card Image 1">
+                <h3>卡片名称 1</h3>
+                <p>描述信息 1</p>
+                <div class="price">
+                    <span>价格: ¥9.9</span>
+                    <button>购买</button>
+                </div>
+            </div>
+            <div class="card">
+                <img src="card_image_2.jpg" alt="Card Image 2">
+                <h3>卡片名称 2</h3>
+                <p>描述信息 2</p>
+                <div class="price">
+                    <span>价格: ¥14.9</span>
+                    <button>购买</button>
+                </div>
+            </div>
+            <div class="card">
+                <img src="card_image_3.jpg" alt="Card Image 3">
+                <h3>卡片名称 3</h3>
+                <p>描述信息 3</p>
+                <div class="price">
+                    <span>价格: ¥19.9</span>
+                    <button>购买</button>
+                </div>
+            </div>
+            <div class="card">
+                <img src="card_image_4.jpg" alt="Card Image 4">
+                <h3>卡片名称 4</h3>
+                <p>描述信息 4</p>
+                <div class="price">
+                    <span>价格: ¥24.9</span>
+                    <button>购买</button>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script src="scripts.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const recommendations = document.querySelector('.recommendations .cards');
+        const cardsData = [
+            { image: 'card_image_1.jpg', title: '卡片名称 1', description: '描述信息 1', price: '¥9.9' },
+            { image: 'card_image_2.jpg', title: '卡片名称 2', description: '描述信息 2', price: '¥14.9' },
+            { image: 'card_image_3.jpg', title: '卡片名称 3', description: '描述信息 3', price: '¥19.9' },
+            { image: 'card_image_4.jpg', title: '卡片名称 4', description: '描述信息 4', price: '¥24.9' }
+        ];
+
+        cardsData.forEach(card => {
+            const cardElement = document.createElement('div');
+            cardElement.classList.add('card');
+            cardElement.innerHTML = `
+            <img src="${card.image}" alt="${card.title}">
+            <h3>${card.title}</h3>
+            <p>${card.description}</p>
+            <div class="price">
+                <span>价格: ${card.price}</span>
+                <button>购买</button>
+            </div>
+        `;
+            recommendations.appendChild(cardElement);
+        });
+    });
+</script>
+</body>
+</html>

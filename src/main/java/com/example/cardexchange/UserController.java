@@ -44,27 +44,35 @@ public class UserController {
     public ResponseMessage<Map<String, Object>> login(@RequestParam String username, @RequestParam String password)
     {
         try {
-            User new_user = new User();
-            new_user.setUsername(username);
-            new_user.setPassword(password);
-            boolean verify = userService.userlogin(new_user);
+            User newUser = new User();
+            newUser.setUsername(username);
+            newUser.setPassword(password);
+            boolean verify = userService.userlogin(newUser);
             if (verify) {
-                Map<String, Object> response = new HashMap<>();
-                response.put("status", "success");
-                response.put("message", "Login successful");
-                return ResponseMessage.success(response);
+                User user = userService.getUserByUsername(username);
+                if (user != null) {
+                    Map<String, Object> response = new HashMap<>();
+                    response.put("status", "success");
+                    response.put("message", "Login successful");
+                    response.put("user", user); // 将用户信息添加到响应中
+                    return ResponseMessage.success(response);
+                } else {
+                    Map<String, Object> response = new HashMap<>();
+                    response.put("status", "error");
+                    response.put("message", "User not found");
+                    return ResponseMessage.badRequest(response);
+                }
             } else {
                 Map<String, Object> response = new HashMap<>();
                 response.put("status", "error");
                 response.put("message", "Invalid username or password");
                 return ResponseMessage.unauthorized(response);
             }
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             Map<String, Object> response = new HashMap<>();
             response.put("status", "error");
             response.put("message", e.getMessage());
             return ResponseMessage.badRequest(response);
         }
     }
-
 }

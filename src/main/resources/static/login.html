@@ -167,6 +167,8 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <script>
+
+
     // 注册跳转逻辑
     document.getElementById('registerLink').addEventListener('click', function() {
         window.location.href = 'register.html';  // 跳转到注册页面
@@ -188,12 +190,8 @@
         axios.post('http://localhost:8080/users/login', formData)
             .then(function(response) {
                 if (response.data.message === 'success') { // 假设后端返回的响应对象中有一个status字段
-                    // 假设返回的数据包含 userId 和 userToken
-                    const userData = response.data.data;
-                    // 将登录信息存储到 localStorage
-                    localStorage.setItem('userId', userData.userId);
-                    localStorage.setItem('userToken', userData.userToken);
-                    // 跳转到首页或其他页面
+
+
                     window.location.href = 'home.html';
                 } else {
                     alert('登录失败：' + response.data.message);

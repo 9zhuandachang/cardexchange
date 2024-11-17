@@ -3,8 +3,6 @@ import com.example.cardexchange.Entity.User;
 import com.example.cardexchange.Service.EmailService;
 import com.example.cardexchange.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +10,7 @@ import java.util.Map;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/users")
+
 public class UserController {
 
     @Autowired
@@ -55,6 +54,7 @@ public class UserController {
                     response.put("status", "success");
                     response.put("message", "Login successful");
                     response.put("user", user); // 将用户信息添加到响应中
+
                     return ResponseMessage.success(response);
                 } else {
                     Map<String, Object> response = new HashMap<>();

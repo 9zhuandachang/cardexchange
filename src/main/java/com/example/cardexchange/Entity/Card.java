@@ -7,8 +7,12 @@ public class Card {
     @Id
     long id;
     String img_url;
+
     public String getImg_url() {
         return img_url;
     }
+
+
+
 
 }

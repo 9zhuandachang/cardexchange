@@ -40,6 +40,8 @@ private T data;
 }
 public static <T> ResponseMessage<T> success(T data)
 {
+
+
     return new ResponseMessage<>(HttpStatus.OK.value(),"success",data);
 }
 

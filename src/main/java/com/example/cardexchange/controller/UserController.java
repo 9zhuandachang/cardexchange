@@ -1,5 +1,6 @@
-package com.example.cardexchange;
+package com.example.cardexchange.controller;
 import com.example.cardexchange.Entity.User;
+import com.example.cardexchange.ResponseMessage;
 import com.example.cardexchange.Service.EmailService;
 import com.example.cardexchange.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

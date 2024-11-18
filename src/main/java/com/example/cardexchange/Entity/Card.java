@@ -8,8 +8,16 @@ public class Card {
     long id;
     String img_url;
 
+    public long getId() {
+        return id;
+    }
+
     public String getImg_url() {
         return img_url;
+    }
+
+    public void setImg_url(String img_url) {
+        this.img_url = img_url;
     }
 
 

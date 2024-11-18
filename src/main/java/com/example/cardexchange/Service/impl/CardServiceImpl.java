@@ -10,10 +10,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,7 +22,7 @@ public class CardServiceImpl implements CardService {
     private EsportsCardRepository esportsCardRepository;
 
     @Override
-    public List<CardVo> searchByTeam(String team) {
+    public List<Card> searchByTeam(Long team) {
         // 查询export表获得主键
         List<EsportsCards> byTeam = esportsCardRepository.findByTeam(team);
         List<Long> cardIds = byTeam.stream().map(EsportsCards::getId).collect(Collectors.toList());
@@ -35,16 +32,19 @@ public class CardServiceImpl implements CardService {
 
         // 根据主键查询卡片信息
         List<Card> cards = cardRepository.findAllById(cardIds);
-        Map<Long, Card> cardMap = cards.stream()
-                .collect(Collectors.toMap(Card::getId, card -> card));
+        return cards;
+    }
 
-        List<CardVo> res = new ArrayList<>();
-        for(EsportsCards esportsCards : byTeam){
-            CardVo cardVo = new CardVo();
-            BeanUtils.copyProperties(esportsCards, cardVo );
-            cardVo.setImg_url(cardMap.get(esportsCards.getId()).getImg_url());
-            res.add(cardVo);
-        }
-        return res;
+    @Override
+    public CardVo searchById(Long id) {
+        Optional<Card> optionalCard = cardRepository.findById(id);
+
+        Optional<EsportsCards> optionalEsportsCards = esportsCardRepository.findById(id);
+
+        CardVo cardVo = new CardVo();
+        BeanUtils.copyProperties(optionalEsportsCards.get(), cardVo);
+        cardVo.setImg_url(optionalCard.get().getImg_url());
+
+        return cardVo;
     }
 }

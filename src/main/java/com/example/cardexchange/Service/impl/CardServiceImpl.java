@@ -22,7 +22,7 @@ public class CardServiceImpl implements CardService {
     private EsportsCardRepository esportsCardRepository;
 
     @Override
-    public List<Card> searchByTeam(Long team) {
+    public List<Card> searchByTeam(String team) {
         // 查询export表获得主键
         List<EsportsCards> byTeam = esportsCardRepository.findByTeam(team);
         List<Long> cardIds = byTeam.stream().map(EsportsCards::getId).collect(Collectors.toList());

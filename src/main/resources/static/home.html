@@ -109,17 +109,17 @@
             flex-wrap: wrap;
             justify-content: space-between;
             padding: 20px;
+            margin: 0 200px;
         }
 
         .product-card {
-            width: 15%;
+            width: 20%;
             margin-bottom: 20px;
             background-color: white;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
             overflow: hidden;
-            margin-left: 10px;
-            margin-right: 10px;
+
         }
 
         .product-card img {
@@ -177,14 +177,14 @@
 
         <div class="slide" style="background-image: url('image/board1.jpg');">
             <div class="slide-content">
-                <h1> L P L</h1>
-                <p>mvp 卡</p>
+                <h1> L P L  明 星 选 手</h1>
+
             </div>
         </div>
         <div class="slide" style="background-image: url('image/board2.jpg');">
             <div class="slide-content">
-                <h1>Meet Top Collectors</h1>
-                <p>Network with enthusiasts from around the world</p>
+                <h1>L P L 17 支 队 伍</h1>
+
             </div>
         </div>
     </div>
@@ -193,45 +193,86 @@
 </div>
 
 <!-- 商品展示区域 -->
-<div class="product-list">
-    <div class="product-card">
-        <img src="lpl卡片/WBG-CRISP.png" alt="Card Image" sizes="(max-width: 600px) 480px, 800px">
-        <div class="title">2020-21 Panini NBA Hoops Deni Avdija</div>
-
-        <div class="details">
-        </div>
-    </div>
-    <div class="product-card">
-        <img src="lpl卡片/LNG-ZIKA.png" alt="Card Image">
-        <div class="title">2021 Upper Deck Meli</div>
-
-        <div class="details">
-
-        </div>
-    </div>
-    <div class="product-card">
-        <img src="lpl卡片/BLG-KNIGHT.png" alt="Card Image">
-        <div class="title">2021-22 Panini Mosaic Donovan Mitchell</div>
-
-        <div class="details">
-
-        </div>
-    </div>
-    <div class="product-card">
-        <img src="lpl卡片/BLG-BIN.png" alt="Card Image">
-        <div class="title">2019-20 Panini Prizm Nicolas Claxton</div>
-
-        <div class="details">
-
-        </div>
-    </div>
-</div>
+<div class="product-list" id="product-list"></div>
 
 <!-- 底部区域 -->
 <!--<div class="footer">-->
 <!--    <p>&copy; 2024 Card Show Exhibition</p>-->
 <!--</div>-->
+<script>
+    // Sample function to simulate the API request
+    async function fetchCardData() {
+        const cardIds = Array.from({ length: 8 }, (_, i) => i + 1); // Generate random card IDs (1-16)
 
+        const cardPromises = cardIds.map(id => {
+            return fetch(`card/search_by_id?id=${id}`) // Replace with your API endpoint
+                .then(response => response.json())
+
+                .catch(error => console.error('Error fetching card data:', error));
+        });
+
+        const cards = await Promise.all(cardPromises); // Wait for all fetch requests to complete
+
+        renderCards(cards); // Render the cards
+    }
+
+    function renderCards(cards) {
+        const productList = document.getElementById('product-list');
+        productList.innerHTML = ''; // 清空现有内容
+
+        cards.forEach(card => {
+            const productCard = document.createElement('div');
+            productCard.classList.add('product-card');
+
+            const img = document.createElement('img');
+            img.src = `lpl卡片/${card.img_url}.png`; // 使用 card.img_url 动态生成图片路径
+            img.alt = `${card.playerName} Card Image`;
+
+            const title = document.createElement('div');
+            title.classList.add('title');
+            title.textContent = `${card.releaseYear} ${card.publisher} ${card.playerName}`;
+
+            const details = document.createElement('div');
+            details.classList.add('details');
+            details.innerHTML = `
+            <p><strong>Team:</strong> ${card.team}</p>
+            <p><strong>Release Year:</strong> ${card.releaseYear}</p>
+            <p><strong>Player Name:</strong> ${card.playerName}</p>
+        `;
+
+            // 将所有元素加入卡片容器
+            productCard.appendChild(img);
+            productCard.appendChild(title);
+            productCard.appendChild(details);
+
+            // 为每个卡片添加点击事件
+            productCard.addEventListener('click', function () {
+                // 使用 card.id 动态生成 API 请求
+                fetch(`card/search_by_id?id=${card.id}`, {
+                    method: 'GET', // GET 请求
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        // 将获取的数据存储到 sessionStorage
+                        sessionStorage.setItem('card', JSON.stringify(data));
+                        // 跳转到 detail.html 页面
+                        window.location.href = 'detail.html';
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            });
+
+            productList.appendChild(productCard); // 将卡片添加到 productList 容器中
+        });
+    }
+
+
+    // Call the function to fetch and render cards when the page loads
+    fetchCardData();
+
+
+</script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         let slides = document.querySelectorAll(".slide");

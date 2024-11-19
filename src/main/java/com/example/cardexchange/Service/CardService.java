@@ -8,4 +8,6 @@ public interface CardService {
     List<Card> searchByTeam(String team);
 
     CardVo searchById(Long id);
+
+
 }

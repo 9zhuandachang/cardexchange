@@ -24,4 +24,8 @@ public class CardController {
     public CardVo searchByTeamForInfo(@RequestParam("id") Long id) {
         return cardService.searchById(id);
     }
+
+    @GetMapping("/recomendtions")
+    public List<CardVo> searchRecomendtions() { return cardService.searchRecomendtions();}
+
 }

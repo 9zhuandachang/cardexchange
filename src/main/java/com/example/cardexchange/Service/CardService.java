@@ -9,5 +9,7 @@ public interface CardService {
 
     CardVo searchById(Long id);
 
+    List<CardVo> searchRecomendtions();
+
 
 }

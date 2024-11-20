@@ -136,7 +136,6 @@
             background-color: #0056b3;
         }
     </style>
-    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <header>
@@ -149,19 +148,19 @@
 
 <main>
     <section class="card-section">
-        <img src="theshy_card.jpg" alt="Theshy Card">
+        <img src="" alt="Card Image" id="card-image">
         <div class="card-info">
-            <h2>挑战者 I级 WBG 登峰 THESHY_姜承録 无编</h2>
+            <h2 id="card-title">卡片标题</h2>
             <ul>
-                <li><strong>发售时间:</strong> 2023年</li>
-                <li><strong>货号:</strong> 挑战者RISE.128登峰I级WBG</li>
-                <li><strong>系列名称:</strong> 挑战者</li>
-                <li><strong>战队:</strong> WBG</li>
-                <li><strong>平行:</strong> I级</li>
-                <li><strong>卡种:</strong> 登峰</li>
+                <li><strong>发售时间:</strong> <span id="release-date"></span></li>
+                <li><strong>货号:</strong> <span id="product-id"></span></li>
+                <li><strong>系列名称:</strong> <span id="series-name"></span></li>
+                <li><strong>战队:</strong> <span id="team"></span></li>
+                <li><strong>平行:</strong> <span id="parallel"></span></li>
+                <li><strong>卡种:</strong> <span id="card-type"></span></li>
             </ul>
             <div class="price">
-                <span>最低售价: ¥4.9</span>
+                <span>最低售价: ¥<span id="price"></span></span>
                 <button>购买</button>
             </div>
         </div>
@@ -169,73 +168,30 @@
 
     <section class="recommendations">
         <h2>为您推荐</h2>
-        <div class="cards">
-            <div class="card">
-                <img src="card_image_1.jpg" alt="Card Image 1">
-                <h3>卡片名称 1</h3>
-                <p>描述信息 1</p>
-                <div class="price">
-                    <span>价格: ¥9.9</span>
-                    <button>购买</button>
-                </div>
-            </div>
-            <div class="card">
-                <img src="card_image_2.jpg" alt="Card Image 2">
-                <h3>卡片名称 2</h3>
-                <p>描述信息 2</p>
-                <div class="price">
-                    <span>价格: ¥14.9</span>
-                    <button>购买</button>
-                </div>
-            </div>
-            <div class="card">
-                <img src="card_image_3.jpg" alt="Card Image 3">
-                <h3>卡片名称 3</h3>
-                <p>描述信息 3</p>
-                <div class="price">
-                    <span>价格: ¥19.9</span>
-                    <button>购买</button>
-                </div>
-            </div>
-            <div class="card">
-                <img src="card_image_4.jpg" alt="Card Image 4">
-                <h3>卡片名称 4</h3>
-                <p>描述信息 4</p>
-                <div class="price">
-                    <span>价格: ¥24.9</span>
-                    <button>购买</button>
-                </div>
-            </div>
+        <div class="cards" id="recommendation-cards">
+            <!-- 推荐卡片将通过 JavaScript 动态插入 -->
         </div>
     </section>
+
 </main>
 
-<script src="scripts.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const recommendations = document.querySelector('.recommendations .cards');
-        const cardsData = [
-            { image: 'card_image_1.jpg', title: '卡片名称 1', description: '描述信息 1', price: '¥9.9' },
-            { image: 'card_image_2.jpg', title: '卡片名称 2', description: '描述信息 2', price: '¥14.9' },
-            { image: 'card_image_3.jpg', title: '卡片名称 3', description: '描述信息 3', price: '¥19.9' },
-            { image: 'card_image_4.jpg', title: '卡片名称 4', description: '描述信息 4', price: '¥24.9' }
-        ];
+    // 从sessionStorage获取存储的卡片数据
+    const cardData = JSON.parse(sessionStorage.getItem('card'));
 
-        cardsData.forEach(card => {
-            const cardElement = document.createElement('div');
-            cardElement.classList.add('card');
-            cardElement.innerHTML = `
-            <img src="${card.image}" alt="${card.title}">
-            <h3>${card.title}</h3>
-            <p>${card.description}</p>
-            <div class="price">
-                <span>价格: ${card.price}</span>
-                <button>购买</button>
-            </div>
-        `;
-            recommendations.appendChild(cardElement);
-        });
-    });
+    // 检查cardData是否存在
+    if (cardData) {
+        // 更新页面元素
+        document.getElementById('card-image').src ='lpl卡片/'+ cardData.img_url+ '.png'; // 设置图片
+        document.getElementById('card-title').textContent = cardData.playerName; // 设置卡片标题
+        document.getElementById('release-date').textContent = cardData.releaseYear; // 设置发售时间
+        document.getElementById('product-id').textContent = cardData.cardNumber; // 设置货号
+        document.getElementById('series-name').textContent = cardData.series; // 设置系列名称
+        document.getElementById('team').textContent = cardData.team; // 设置战队
+        document.getElementById('parallel').textContent = cardData.parallel; // 设置平行
+        document.getElementById('card-type').textContent = cardData.cardType; // 设置卡种
+    }
 </script>
+
 </body>
 </html>

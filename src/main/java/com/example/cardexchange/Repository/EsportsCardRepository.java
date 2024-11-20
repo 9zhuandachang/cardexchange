@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface EsportsCardRepository extends JpaRepository<EsportsCards, Long> {
     @Query("SELECT e FROM EsportsCards e WHERE e.team = :team")
-    List<EsportsCards> findByTeam(@Param("team") Long team);
+    List<EsportsCards> findByTeam(@Param("team") String team);
 }

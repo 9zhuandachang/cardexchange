@@ -96,82 +96,105 @@
     </style>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // 搜索按钮点击事件
-            document.querySelector('.search-bar button').addEventListener('click', function() {
-                const query = document.querySelector('.search-bar input[type="text"]').value;
-                if (query) {
-                    alert('搜索内容：' + query);
-                } else {
-                    alert('请输入搜索内容');
-                }
-            });
+            // 从sessionStorage中获取数据
+            const imageUrls = JSON.parse(sessionStorage.getItem('searchData'));
+            const imagesContainer = document.getElementById('products');
 
-            // 过滤器点击事件
-            const filterLinks = document.querySelectorAll('.sidebar ul li a');
-            filterLinks.forEach(link => {
-                link.addEventListener('click', function(event) {
-                    event.preventDefault();
-                    alert('您点击了过滤器：' + this.textContent);
+            if (imageUrls) {
+                imageUrls.forEach(url => {
+                    // 为每个URL创建一个图像元素
+                    const img = document.createElement('img');
+                    img.src = 'lpl卡片/' + url['img_url'] + '.png';
+                    img.addEventListener('click', function() {
+                        fetch(`card/search_by_id?id=${url.id}`, {
+                            method: 'GET', // 使用GET请求
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                sessionStorage.setItem('card', JSON.stringify(data)); // 存储数据
+                                window.location.href = 'detail.html';
+                            })
+                            .catch((error) => {
+                                // 处理请求错误
+                                console.error('Error:', error);
+                            });
+                    });
+
+                    img.style.width = '150px'; // 设置图像宽度，可以根据需要调整
+                    img.style.height = 'auto'; // 自动高度保持图像比例
+                    // 将图像元素添加到容器中
+                    imagesContainer.appendChild(img);
                 });
-            });
+            } else {
+                // 如果没有找到数据，显示一些提示信息
+                imagesContainer.innerHTML = '<p>No images found. Please perform a search.</p>';
+            }
+            // 清理sessionStorage
+            sessionStorage.removeItem('searchData');
         });
     </script>
+
+
 </head>
 <body>
 <div class="header">
     <img src="https://via.placeholder.com/150x50.png?text=Card+Hobby" alt="Card Hobby">
     <div class="search-bar">
-        <input type="text" placeholder="搜索 卡号 品牌 球星 套装">
-        <button>搜索</button>
+        <input type="text" id="searchInput" placeholder="搜索战队、选手、系列、年份">
+        <button id="searchButton">搜索</button>
     </div>
 </div>
 <div style="display: flex; margin: 20px;">
     <div class="sidebar">
         <h3>过滤器</h3>
         <ul>
-            <li><a href="#">体育类型</a></li>
-            <li><a href="#">年代</a></li>
-            <li><a href="#">厂商</a></li>
-            <li><a href="#">系列</a></li>
-            <li><a href="#">球员</a></li>
-            <li><a href="#">是否新秀</a></li>
-            <li><a href="#">是否评级</a></li>
-            <li><a href="#">联盟</a></li>
-            <li><a href="#">球队</a></li>
+
         </ul>
     </div>
     <div class="product-container">
-        <div class="product">
-            <img src="https://via.placeholder.com/150x200.png?text=Buffun+Masterpiece+Faker" alt="2024 Buffun Masterpiece Faker">
-            <div class="product-title">2024 Buffun Masterpiece Faker 李相赫</div>
-            <div class="product-price">&yen; 30,000</div>
-        </div>
-        <div class="product">
-            <img src="https://via.placeholder.com/150x200.png?text=Buffun+LPL+BeryL" alt="2023-24 Buffun LPL BeryL">
-            <div class="product-title">2023-24 Buffun LPL BeryL</div>
-            <div class="product-price">&yen; 215</div>
-        </div>
-        <div class="product">
-            <img src="https://via.placeholder.com/150x200.png?text=Buffun+LPL+Fiesta+NS" alt="2023 Buffun LPL fiesta NS">
-            <div class="product-title">2023 Buffun LPL fiesta NS</div>
-            <div class="product-price">&yen; 1</div>
-        </div>
-        <div class="product">
-            <img src="https://via.placeholder.com/150x200.png?text=Buffun+LPL+Fearness+LGD" alt="2023 Buffun LPL fearness">
-            <div class="product-title">2023 Buffun LPL fearness 陈国琛 LGD</div>
-            <div class="product-price">&yen; 1</div>
-        </div>
-        <div class="product">
-            <img src="https://via.placeholder.com/150x200.png?text=Buffun+LPL+Weiwei+WBG" alt="2023 Buffun LPL Weiwei">
-            <div class="product-title">2023 Buffun LPL Weiwei WBG</div>
-            <div class="product-price">&yen; 1</div>
-        </div>
-        <div class="product">
-            <img src="https://via.placeholder.com/150x200.png?text=Buffun+LPL+Tianze+IG" alt="2023 Buffun LPL tianze IG">
-            <div class="product-title">2023 Buffun LPL tianze IG</div>
-            <div class="product-price">&yen; 1</div>
-        </div>
+        <div id="products"></div>
     </div>
 </div>
+<script>
+    // 获取搜索输入框和按钮的DOM元素
+    const searchInput = document.getElementById('searchInput');
+    const searchButton = document.getElementById('searchButton');
+
+    // 定义一个函数来处理搜索请求
+    function handleSearch() {
+        // 获取用户输入的搜索关键词
+        const searchQuery = searchInput.value;
+
+        // 检查搜索关键词是否为空
+        if (searchQuery.trim() === '') {
+            alert('请输入搜索内容');
+            return;
+        }
+
+        // 使用fetch API向后端发送请求
+        fetch(`card/search_by_team?team=${encodeURIComponent(searchQuery)}`, {
+            method: 'GET', // 使用GET请求
+        })
+            .then(response => response.json())
+            .then(data => {
+                sessionStorage.setItem('searchData', JSON.stringify(data)); // 存储数据
+                window.location.href = 'search.html';
+            })
+            .catch((error) => {
+                // 处理请求错误
+                console.error('Error:', error);
+            });
+    }
+
+    // 为搜索按钮添加点击事件监听器
+    searchButton.addEventListener('click', handleSearch);
+
+    // 如果你希望在用户按下回车键时也触发搜索，可以添加以下代码
+    searchInput.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            handleSearch();
+        }
+    });
+</script>
 </body>
 </html>

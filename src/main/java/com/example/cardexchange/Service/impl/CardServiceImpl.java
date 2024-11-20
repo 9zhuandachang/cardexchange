@@ -3,6 +3,7 @@ package com.example.cardexchange.Service.impl;
 import com.example.cardexchange.Entity.Card;
 import com.example.cardexchange.Entity.EsportsCards;
 import com.example.cardexchange.Pojo.CardVo;
+import com.example.cardexchange.Repository.CardProductRepository;
 import com.example.cardexchange.Repository.CardRepository;
 import com.example.cardexchange.Repository.EsportsCardRepository;
 import com.example.cardexchange.Service.CardService;
@@ -21,8 +22,9 @@ public class CardServiceImpl implements CardService {
     @Autowired
     private EsportsCardRepository esportsCardRepository;
 
+
     @Override
-    public List<Card> searchByTeam(Long team) {
+    public List<Card> searchByTeam(String team) {
         // 查询export表获得主键
         List<EsportsCards> byTeam = esportsCardRepository.findByTeam(team);
         List<Long> cardIds = byTeam.stream().map(EsportsCards::getId).collect(Collectors.toList());
@@ -46,5 +48,23 @@ public class CardServiceImpl implements CardService {
         cardVo.setImg_url(optionalCard.get().getImg_url());
 
         return cardVo;
+    }
+
+    @Autowired
+    private CardProductRepository  cardProductRepository;
+    public List<CardVo> searchRecomendtions()
+    {
+        List<Long> list= cardProductRepository.findTop4CardIdsByMoney();
+        List<CardVo> cardVoList = new ArrayList<>();
+        for (Long id : list) {
+            CardVo cardVo = searchById(id);
+            if (cardVo != null) { // 如果 searchById 返回了非空的 CardVo 对象，则添加到列表中
+                cardVoList.add(cardVo);
+            }
+        }
+
+        // 返回包含 CardVo 对象的列表
+        return cardVoList;
+
     }
 }

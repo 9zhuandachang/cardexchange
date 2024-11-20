@@ -5,7 +5,11 @@ import com.example.cardexchange.Pojo.CardVo;
 import java.util.List;
 
 public interface CardService {
-    List<Card> searchByTeam(Long team);
+    List<Card> searchByTeam(String team);
 
     CardVo searchById(Long id);
+
+    List<CardVo> searchRecomendtions();
+
+
 }

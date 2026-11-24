@@ -1,5 +1,7 @@
 package com.example.cardexchange.Pojo;
 
+import java.math.BigDecimal;
+
 public class CardVo {
     private Long id;
     private String sportsType;
@@ -17,6 +19,24 @@ public class CardVo {
     private Boolean isAutograph;
     private Boolean isReviewed;
     private String img_url;
+    private BigDecimal price;
+    private Long sellerId;
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public Long getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(Long sellerId) {
+        this.sellerId = sellerId;
+    }
 
     public String getImg_url() {
         return img_url;

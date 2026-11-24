@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface EsportsCardRepository extends JpaRepository<EsportsCards, Long> {
-    @Query("SELECT e FROM EsportsCards e WHERE e.team = :team")
+    @Query("SELECT e FROM EsportsCards e WHERE LOWER(e.team) = LOWER(:team)")
     List<EsportsCards> findByTeam(@Param("team") String team);
 }

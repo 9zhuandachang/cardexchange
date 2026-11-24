@@ -11,5 +11,7 @@ public interface CardService {
 
     List<CardVo> searchRecomendtions();
 
+    List<CardVo> listCards(String keyword, String team, String grade, String sort);
 
+    List<CardVo> listUserCards(Long userId);
 }

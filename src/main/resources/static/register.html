@@ -3,218 +3,351 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>注册页面</title>
+    <title>注册 · LPL Vault</title>
+    <link rel="stylesheet" href="css/app.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        .auth-page {
             min-height: 100vh;
-            margin: 0;
-        }
-
-        .register-container {
-            width: 400px;
-            background-color: #fff;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        .register-container img {
-            width: 100px;
-            margin-bottom: 10px;
-        }
-
-        .register-container h2 {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 14px;
-        }
-
-        .form-group input[type="text"],
-        .form-group input[type="password"],
-        .form-group input[type="email"] {
-            width: calc(100% - 20px);
-            padding: 10px;
-            font-size: 14px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-
-        .verification-group {
             display: flex;
-            gap: 10px;
+            flex-direction: column;
         }
 
-        .verification-group input[type="text"] {
-            flex: 1;
+        .auth-topbar {
+            border-bottom: 1px solid var(--border-quiet);
         }
 
-        .verification-group button {
-            padding: 10px;
-            font-size: 14px;
-            border: 1px solid #ddd;
-            background-color: #f0f0f0;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        .form-group .agreement {
-            font-size: 14px;
+        .auth-topbar-inner {
+            height: 80px;
             display: flex;
             align-items: center;
+            justify-content: space-between;
         }
 
-        .form-group .agreement input[type="checkbox"] {
-            margin-right: 5px;
+        .auth-main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            padding: var(--spacing-80) 0;
         }
 
-        .form-group .agreement a {
-            color: #007bff;
-            text-decoration: none;
-        }
-
-        .submit-btn {
+        .auth-grid {
             width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            background-color: #d9534f;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+            display: grid;
+            grid-template-columns: 5fr 7fr;
+            gap: var(--spacing-56);
+            align-items: start;
         }
 
-        .submit-btn:hover {
-            background-color: #c9302c;
+        .auth-editorial {
+            padding-top: var(--spacing-16);
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-24);
+        }
+
+        .auth-editorial h1 {
+            font-size: var(--text-display);
+            font-weight: var(--font-weight-light);
+            line-height: var(--leading-display);
+            letter-spacing: var(--tracking-display);
+        }
+
+        .auth-editorial p {
+            font-size: var(--text-body);
+            color: var(--color-wood);
+            max-width: 28em;
+        }
+
+        .auth-card {
+            background: var(--surface-soft-white);
+            border: 1px solid var(--border-quiet);
+            border-radius: var(--radius-cards);
+            padding: var(--card-padding);
+            max-width: 520px;
+            width: 100%;
+            justify-self: end;
+            transition: border-color var(--transition-quiet);
+        }
+
+        .auth-card:hover {
+            border-color: var(--border-hover);
+        }
+
+        .auth-card h2 {
+            font-size: var(--text-heading);
+            font-weight: var(--font-weight-light);
+            margin-bottom: var(--spacing-8);
+        }
+
+        .auth-lead {
+            font-size: var(--text-body);
+            color: var(--color-wood);
+            margin-bottom: var(--spacing-40);
+        }
+
+        .field { margin-bottom: var(--spacing-24); }
+
+        .field label {
+            display: block;
+            font-size: var(--text-label);
+            letter-spacing: var(--tracking-label);
+            color: var(--color-wood);
+            margin-bottom: var(--spacing-8);
+        }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-24);
+        }
+
+        .code-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: var(--spacing-16);
+            align-items: end;
+        }
+
+        .strength-track {
+            height: 2px;
+            background: var(--border-quiet);
+            margin-top: 8px;
+        }
+
+        .strength-fill {
+            height: 100%;
+            width: 0;
+            background: var(--color-moss);
+            transition: width var(--transition-quiet), background-color var(--transition-quiet);
+        }
+
+        .form-error {
+            display: none;
+            margin-bottom: var(--spacing-24);
+            padding: 12px 16px;
+            border: 1px solid rgba(201, 168, 140, 0.7);
+            border-left: 2px solid var(--color-charcoal);
+            border-radius: var(--radius-cards);
+            background: rgba(201, 168, 140, 0.14);
+            color: var(--color-charcoal);
+            font-size: 13px;
+        }
+
+        .form-error.show { display: block; }
+
+        .agreement-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 13px;
+            color: var(--color-wood);
+            margin: var(--spacing-24) 0 var(--spacing-40);
+        }
+
+        .agreement-row input { margin-top: 5px; accent-color: var(--color-moss); }
+        .agreement-row a { color: var(--color-grey-blue); }
+
+        .auth-footer {
+            margin-top: var(--spacing-40);
+            padding-top: var(--spacing-24);
+            border-top: 1px solid var(--border-quiet);
+            display: flex;
+            justify-content: space-between;
+            font-size: var(--text-body);
+            color: var(--color-wood);
+        }
+
+        @media (max-width: 860px) {
+            .auth-grid { grid-template-columns: 1fr; gap: var(--spacing-40); }
+            .auth-card { justify-self: start; max-width: 100%; }
+            .two-col { grid-template-columns: 1fr; }
         }
     </style>
 </head>
-<body>
+<body class="auth-page">
 
-<div class="register-container">
-    <img src="logo.png" alt="Logo">
-    <h2>欢迎注册</h2>
-    <form id="registerForm">
-        <!-- 账号输入框 -->
-        <div class="form-group">
-            <label>账号</label>
-            <input type="text" id="username" placeholder="请输入账号" required>
+<header class="auth-topbar">
+    <div class="container auth-topbar-inner">
+        <a href="home.html" class="brand-link">
+            <span class="brand-title">LPL Vault</span>
+            <span class="brand-sub">Archive</span>
+        </a>
+        <a href="home.html" class="text-link">返回交易大厅</a>
+    </div>
+</header>
+
+<main class="auth-main">
+    <div class="container">
+        <div class="auth-grid">
+            <section class="auth-editorial">
+                <span class="label-text">New Account</span>
+                <h1>建立你的<br>藏家身份</h1>
+                <p>完成邮箱验证码校验即可创建账户，在交易大厅收藏单卡并追踪个人卡库与订单记录。</p>
+            </section>
+
+            <section class="auth-card">
+                <h2>创建账号</h2>
+                <p class="auth-lead">请填写以下基本信息</p>
+
+                <div class="form-error" id="regError" role="alert"></div>
+
+                <form id="registerForm">
+                    <div class="field">
+                        <label for="username">USERNAME / 用户名</label>
+                        <input type="text" class="line-input" id="username" placeholder="例如：LPL_Collector" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="email">EMAIL / 邮箱地址</label>
+                        <input type="email" class="line-input" id="email" placeholder="用于接收验证码" required>
+                    </div>
+
+                    <div class="two-col">
+                        <div class="field">
+                            <label for="password">PASSWORD / 设置密码</label>
+                            <input type="password" class="line-input" id="password" placeholder="至少 6 位" required>
+                            <div class="strength-track"><div class="strength-fill" id="strengthFill"></div></div>
+                        </div>
+                        <div class="field">
+                            <label for="confirmPassword">CONFIRM / 确认密码</label>
+                            <input type="password" class="line-input" id="confirmPassword" placeholder="再次输入" required>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="verificationCode">CODE / 邮箱验证码</label>
+                        <div class="code-row">
+                            <input type="text" class="line-input" id="verificationCode" placeholder="请输入验证码" required>
+                            <button type="button" class="quiet-btn quiet-btn-outline quiet-btn-sm" id="getCodeBtn">获取验证码</button>
+                        </div>
+                    </div>
+
+                    <label class="agreement-row">
+                        <input type="checkbox" id="agreement" checked required>
+                        <span>我已阅读并同意 <a href="asserts/privacy_policy.txt" target="_blank">《隐私政策》</a></span>
+                    </label>
+
+                    <button type="submit" class="quiet-btn" id="submitBtn" style="width:100%;">完成注册</button>
+                </form>
+
+                <div class="auth-footer">
+                    <span>已有账号？</span>
+                    <a href="login.html" class="text-link">前往登录 &rarr;</a>
+                </div>
+            </section>
         </div>
+    </div>
+</main>
 
-        <div class="form-group">
-            <label>邮箱地址</label>
-            <input type="email" id="email" placeholder="请输入邮箱地址" required>
-        </div>
-
-        <div class="form-group">
-            <label>设置密码</label>
-            <input type="password" id="password" placeholder="请输入密码" required>
-        </div>
-
-        <div class="form-group">
-            <label>确认密码</label>
-            <input type="password" id="confirmPassword" placeholder="请再次输入密码" required>
-        </div>
-
-        <div class="form-group verification-group">
-            <input type="text" id="verificationCode" placeholder="请输入验证码" required>
-            <button type="button" id="getVerificationCode">获取验证码</button>
-        </div>
-
-        <div class="form-group agreement">
-            <input type="checkbox" id="agreement" required>
-            <span>我已阅读并同意 <a href="#">《用户服务协议》</a> 和 <a href="#">《隐私政策》</a></span>
-        </div>
-
-        <button type="submit" class="submit-btn">立即注册</button>
-    </form>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="js/common.js"></script>
 <script>
-    // 获取验证码按钮的点击事件
-    document.getElementById('getVerificationCode').addEventListener('click', function() {
-        const email = document.getElementById('email').value;
-        if (!email) {
-            alert('请输入邮箱地址');
-            return;
-        }
-        var formData = new FormData();
-// 将邮箱添加到 FormData 对象中
-        formData.append('email', email);
+    const regError = document.getElementById('regError');
+    function showError(msg) {
+        regError.textContent = msg;
+        regError.classList.add('show');
+    }
+    function clearError() {
+        regError.classList.remove('show');
+    }
 
-// 调用后端接口发送验证码
-        axios.post('http://localhost:8080/users/sendcode', formData)
-            .then(function(response) {
-                if (response.data.code === 200) {
-                    alert('验证码已发送，请检查您的邮箱！');
-                } else {
-                    alert('验证码发送失败：' + response.data.message);
-                }
-            })
-            .catch(function(error) {
-                console.error('请求错误:', error);
-                alert('发送验证码失败，请稍后再试');
-            });
+    document.getElementById('password').addEventListener('input', function () {
+        const v = this.value;
+        let score = 0;
+        if (v.length >= 6) score++;
+        if (/[A-Za-z]/.test(v)) score++;
+        if (/[0-9]/.test(v)) score++;
+        if (/[^A-Za-z0-9]/.test(v) || v.length >= 10) score++;
+        const fill = document.getElementById('strengthFill');
+        const widths = ['0%', '25%', '50%', '75%', '100%'];
+        const colors = ['transparent', '#c9a88c', '#a89279', '#7ba0b8', '#5a7a6b'];
+        fill.style.width = widths[score];
+        fill.style.backgroundColor = colors[score];
     });
 
-    // 注册表单提交事件
-    document.getElementById('registerForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // 阻止默认的表单提交行为
-        const username = document.getElementById('username').value
-        const confirmPassword=document.getElementById('confirmPassword').value
-        const email = document.getElementById('email').value;
+    const getCodeBtn = document.getElementById('getCodeBtn');
+    getCodeBtn.addEventListener('click', async () => {
+        clearError();
+        const email = document.getElementById('email').value.trim();
+        if (!email || !email.includes('@')) {
+            showError('请先填写有效的邮箱地址');
+            return;
+        }
+        getCodeBtn.disabled = true;
+        getCodeBtn.textContent = '发送中…';
+        try {
+            const fd = new FormData();
+            fd.append('email', email);
+            const res = await fetch('/users/sendcode', { method: 'POST', body: fd });
+            const data = await res.json();
+            if (data.code === 200) {
+                LPLVault.showToast('验证码已发送，请查收邮箱', 'success');
+                let sec = 60;
+                const timer = setInterval(() => {
+                    sec--;
+                    if (sec <= 0) {
+                        clearInterval(timer);
+                        getCodeBtn.disabled = false;
+                        getCodeBtn.textContent = '重新获取';
+                    } else {
+                        getCodeBtn.textContent = `${sec}s`;
+                    }
+                }, 1000);
+            } else {
+                showError(data.message || '发送验证码失败');
+                getCodeBtn.disabled = false;
+                getCodeBtn.textContent = '获取验证码';
+            }
+        } catch (err) {
+            console.error(err);
+            showError('发送验证码失败，请检查邮件服务配置');
+            getCodeBtn.disabled = false;
+            getCodeBtn.textContent = '获取验证码';
+        }
+    });
+
+    document.getElementById('registerForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        clearError();
+        const username = document.getElementById('username').value.trim();
+        const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value;
-        const verificationCode = document.getElementById('verificationCode').value;
-        const agreement = document.getElementById('agreement').checked;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        const verificationCode = document.getElementById('verificationCode').value.trim();
 
-        // 验证输入
-        if (!email || !password || !confirmPassword || !verificationCode || !agreement) {
-            alert('请填写所有字段并同意协议');
+        if (password.length < 6) {
+            showError('密码至少需要 6 位字符');
             return;
         }
-
         if (password !== confirmPassword) {
-            alert('两次密码输入不一致');
+            showError('两次输入的密码不一致');
             return;
         }
 
-        // 发送注册请求
-        axios.post('http://localhost:8080/users/register', {
-            username:username,
-            email: email,
-            password: password,
-            verificationCode: verificationCode
-        })
-            .then(function(response) {
-                if (response.data.code === 200) {
-                    alert('注册成功！');
-                    window.location.href = 'login.html'; // 注册成功后跳转到登录页面
-                } else {
-                    alert('注册失败：' + response.data.message);
-                }
-            })
-            .catch(function(error) {
-                console.error('注册请求错误:', error);
-                alert('注册请求失败，请稍后再试');
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.textContent = '创建中…';
+
+        try {
+            const res = await fetch('/users/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, email, password, verificationCode })
             });
+            const data = await res.json();
+            if (data.code === 200) {
+                LPLVault.showToast('注册成功，即将前往登录', 'success');
+                setTimeout(() => { window.location.href = 'login.html'; }, 700);
+            } else {
+                showError(data.message || '注册失败，请检查验证码');
+            }
+        } catch (err) {
+            console.error(err);
+            showError('注册请求失败，请确认后端正在运行');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = '完成注册';
+        }
     });
 </script>
-
 </body>
 </html>

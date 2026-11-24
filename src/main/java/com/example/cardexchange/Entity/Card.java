@@ -12,6 +12,10 @@ public class Card {
         return id;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public String getImg_url() {
         return img_url;
     }

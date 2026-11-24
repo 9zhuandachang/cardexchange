@@ -1,197 +1,510 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Card Shop</title>
+    <title>卡片详情 · LPL Vault</title>
+    <link rel="stylesheet" href="css/app.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: var(--spacing-40) 0 var(--spacing-24);
+            font-size: var(--text-label);
+            letter-spacing: 0.08em;
+            color: var(--color-wood);
         }
 
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
+        .breadcrumb a {
+            color: var(--color-grey-blue);
         }
 
-        header {
+        .breadcrumb a:hover {
+            color: var(--color-moss);
+        }
+
+        /* Asymmetric 5:7 Detail Layout */
+        .detail-layout {
+            display: grid;
+            grid-template-columns: 5fr 7fr;
+            gap: var(--spacing-56);
+            align-items: start;
+        }
+
+        .detail-visual-card {
+            background: var(--surface-soft-white);
+            border: 1px solid var(--border-quiet);
+            border-radius: var(--radius-cards);
+            padding: var(--card-padding);
+            transition: border-color var(--transition-quiet);
+        }
+
+        .detail-visual-card:hover {
+            border-color: var(--border-hover);
+        }
+
+        .detail-visual-top {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: var(--spacing-16);
         }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        nav input,
-        nav button {
-            padding: 0.5rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        nav button {
-            background-color: #007bff;
-            color: #fff;
-            cursor: pointer;
-        }
-
-        .card-section {
-            display: flex;
-            gap: 2rem;
-            padding: 2rem;
-            background-color: #fff;
-            margin: 2rem 0;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .card-section img {
-            width: 50%;
-            height: auto;
-            border-radius: 8px;
-        }
-
-        .card-info {
-            width: 50%;
-        }
-
-        .price span {
-            color: orange;
-            font-weight: bold;
-        }
-
-        .recommendations {
-            padding: 2rem;
-            background-color: #fff;
-            margin: 2rem 0;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .recommendations h2 {
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-
-        .cards {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .card {
-            flex-basis: calc(25% - 1rem);
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s;
-        }
-
-        .card:hover {
-            transform: translateY(-10px);
-        }
-
-        .card img {
+        .detail-art-trigger {
+            display: block;
             width: 100%;
-            height: auto;
+            background: transparent;
+            border: none;
+            padding: 0;
+            cursor: zoom-in;
         }
 
-        .card h3 {
-            font-size: 1.2rem;
-            margin: 1rem 0;
-            padding: 0 1rem;
-        }
-
-        .card p {
-            padding: 0 1rem;
-            color: #555;
-        }
-
-        .card .price {
+        .detail-visual-note {
+            margin-top: var(--spacing-16);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem;
-            background-color: #f5f5f5;
+            font-size: var(--text-label);
+            letter-spacing: 0.08em;
+            color: var(--color-wood);
         }
 
-        .card .price button {
-            background-color: #007bff;
-            color: #fff;
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+        .detail-info-col {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-40);
         }
 
-        .card .price button:hover {
-            background-color: #0056b3;
+        .detail-title {
+            font-size: var(--text-display);
+            font-weight: var(--font-weight-light);
+            line-height: var(--leading-display);
+            letter-spacing: var(--tracking-display);
+            color: var(--color-charcoal);
+            margin-top: var(--spacing-8);
+        }
+
+        .detail-subtitle {
+            margin-top: var(--spacing-8);
+            font-size: var(--text-body);
+            color: var(--color-wood);
+        }
+
+        .detail-trade-box {
+            padding: var(--spacing-24) 0;
+            border-top: 1px solid var(--border-divider);
+            border-bottom: 1px solid var(--border-divider);
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-24);
+        }
+
+        .price-header-row {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: var(--spacing-16);
+            flex-wrap: wrap;
+        }
+
+        .detail-price {
+            font-size: var(--text-display);
+            font-weight: var(--font-weight-extralight);
+            color: var(--color-charcoal);
+            font-variant-numeric: tabular-nums;
+            line-height: 1.2;
+        }
+
+        .detail-price .currency {
+            font-size: var(--text-subheading);
+            color: var(--color-wood);
+            margin-right: 6px;
+        }
+
+        .seller-caption {
+            font-size: var(--text-body);
+            color: var(--color-wood);
+        }
+
+        .trade-buttons {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-16);
+            flex-wrap: wrap;
+        }
+
+        .specs-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-24) var(--spacing-40);
+        }
+
+        .spec-row {
+            padding-bottom: var(--spacing-16);
+            border-bottom: 1px solid var(--border-quiet);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .spec-label {
+            font-size: var(--text-label);
+            letter-spacing: var(--tracking-label);
+            color: var(--color-wood);
+        }
+
+        .spec-val {
+            font-size: var(--text-body);
+            font-weight: var(--font-weight-light);
+            color: var(--color-charcoal);
+        }
+
+        .rec-header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-bottom: var(--spacing-40);
+        }
+
+        .rec-heading {
+            font-size: var(--text-heading);
+            font-weight: var(--font-weight-light);
+            color: var(--color-charcoal);
+        }
+
+        .order-preview {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-24);
+            padding: var(--spacing-24) 0;
+            margin: var(--spacing-24) 0;
+            border-top: 1px solid var(--border-divider);
+            border-bottom: 1px solid var(--border-divider);
+        }
+
+        .order-thumb {
+            width: 64px;
+            height: 90px;
+            padding-top: 0;
+            flex-shrink: 0;
+        }
+
+        .lightbox-card {
+            width: min(400px, 88vw);
+            background: var(--color-warm-white);
+            border: 1px solid var(--border-hover);
+            border-radius: var(--radius-cards);
+            padding: var(--spacing-24);
+        }
+
+        @media (max-width: 860px) {
+            .detail-layout {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-40);
+            }
+            .specs-list {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-<header>
-    <div class="logo">LOGO</div>
-    <nav>
-        <input type="text" placeholder="搜索名称、品牌、系列、年代、昵称">
-        <button>搜索</button>
-    </nav>
-</header>
 
-<main>
-    <section class="card-section">
-        <img src="" alt="Card Image" id="card-image">
-        <div class="card-info">
-            <h2 id="card-title">卡片标题</h2>
-            <ul>
-                <li><strong>发售时间:</strong> <span id="release-date"></span></li>
-                <li><strong>货号:</strong> <span id="product-id"></span></li>
-                <li><strong>系列名称:</strong> <span id="series-name"></span></li>
-                <li><strong>战队:</strong> <span id="team"></span></li>
-                <li><strong>平行:</strong> <span id="parallel"></span></li>
-                <li><strong>卡种:</strong> <span id="card-type"></span></li>
-            </ul>
-            <div class="price">
-                <span>最低售价: ¥<span id="price"></span></span>
-                <button>购买</button>
+<header id="site-header"></header>
+
+<main class="container">
+    <nav class="breadcrumb" aria-label="面包屑">
+        <a href="home.html">交易大厅</a>
+        <span>/</span>
+        <a href="search.html" id="bcTeam">战队</a>
+        <span>/</span>
+        <span id="bcPlayer" style="color:var(--color-charcoal);">加载中…</span>
+    </nav>
+
+    <section class="detail-layout">
+        <!-- Left 5fr: Gallery Frame -->
+        <div class="detail-visual-card">
+            <div class="detail-visual-top">
+                <span class="label-text" id="slabNumber">LPL-2024</span>
+                <span class="card-grade-tag" id="slabGrade">GRADE</span>
+            </div>
+            <button type="button" class="detail-art-trigger" id="openZoomBtn" aria-label="放大查看卡面">
+                <div class="card-art-frame">
+                    <img id="cardImage" src="" alt="LPL 选手卡">
+                </div>
+            </button>
+            <div class="detail-visual-note">
+                <span id="reviewStatus">卡面已收录</span>
+                <button type="button" class="text-link" id="openZoomTextBtn" style="font-size:12px;">查看大图</button>
             </div>
         </div>
-    </section>
 
-    <section class="recommendations">
-        <h2>为您推荐</h2>
-        <div class="cards" id="recommendation-cards">
-            <!-- 推荐卡片将通过 JavaScript 动态插入 -->
+        <!-- Right 7fr: Quiet Info & Specs -->
+        <div class="detail-info-col">
+            <div>
+                <span class="label-text" id="detailMetaLabel">LPL COLLECTIBLE</span>
+                <h1 class="detail-title" id="cardTitle">加载中…</h1>
+                <p class="detail-subtitle" id="cardSubtitle"></p>
+            </div>
+
+            <div class="detail-trade-box">
+                <div class="price-header-row">
+                    <div>
+                        <span class="label-text" style="display:block;margin-bottom:6px;">当前挂牌价</span>
+                        <div class="detail-price"><span class="currency">¥</span><span id="cardPrice">—</span></div>
+                    </div>
+                    <span class="seller-caption" id="sellerName">持仓编号 #1</span>
+                </div>
+
+                <div class="trade-buttons">
+                    <button type="button" class="quiet-btn" id="buyBtn">担保购买</button>
+                    <button type="button" class="quiet-btn quiet-btn-outline" id="detailFavBtn">收藏卡片</button>
+                </div>
+            </div>
+
+            <div class="specs-list" id="specsGrid"></div>
         </div>
     </section>
 
+    <hr class="breathing-divider">
+
+    <!-- Recommendations -->
+    <section>
+        <div class="rec-header">
+            <div>
+                <span class="label-text" style="display:block;margin-bottom:8px;">Selected</span>
+                <h2 class="rec-heading">其他高价值馆藏</h2>
+            </div>
+            <a href="search.html" class="text-link">浏览全部 &rarr;</a>
+        </div>
+        <div class="card-grid" id="recGrid">
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+        </div>
+    </section>
 </main>
 
+<footer id="site-footer"></footer>
+
+<!-- Purchase Modal -->
+<div class="modal-backdrop" id="buyModal" role="dialog" aria-modal="true" aria-labelledby="buyModalTitle">
+    <div class="modal-card">
+        <span class="label-text">Confirm Order</span>
+        <h3 id="buyModalTitle" style="font-size:20px;font-weight:300;margin-top:8px;">确认购买此卡片</h3>
+        <div class="order-preview">
+            <div class="card-art-frame order-thumb">
+                <img id="modalThumb" src="" alt="">
+            </div>
+            <div>
+                <div style="font-size:16px;color:var(--color-charcoal);" id="modalTitle">—</div>
+                <div style="font-size:13px;color:var(--color-wood);margin-top:2px;" id="modalSub">—</div>
+                <div class="tabular" style="font-size:20px;color:var(--color-charcoal);margin-top:8px;">¥ <span id="modalPrice">—</span></div>
+            </div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:16px;">
+            <button type="button" class="quiet-btn quiet-btn-outline quiet-btn-sm" id="cancelBuyBtn">取消</button>
+            <button type="button" class="quiet-btn quiet-btn-sm" id="confirmBuyBtn">确认收入卡库</button>
+        </div>
+    </div>
+</div>
+
+<!-- Lightbox Modal -->
+<div class="modal-backdrop" id="zoomModal" role="dialog" aria-modal="true" aria-label="卡面大图预览">
+    <div class="lightbox-card">
+        <div class="card-art-frame">
+            <img id="zoomImage" src="" alt="LPL 选手卡大图">
+        </div>
+        <div style="margin-top:16px;text-align:right;">
+            <button type="button" class="text-link" id="closeZoomBtn">关闭预览</button>
+        </div>
+    </div>
+</div>
+
+<script src="js/common.js"></script>
 <script>
-    // 从sessionStorage获取存储的卡片数据
-    const cardData = JSON.parse(sessionStorage.getItem('card'));
+    LPLVault.renderNavbar('home');
+    LPLVault.renderFooter();
 
-    // 检查cardData是否存在
-    if (cardData) {
-        // 更新页面元素
-        document.getElementById('card-image').src ='lpl卡片/'+ cardData.img_url+ '.png'; // 设置图片
-        document.getElementById('card-title').textContent = cardData.playerName; // 设置卡片标题
-        document.getElementById('release-date').textContent = cardData.releaseYear; // 设置发售时间
-        document.getElementById('product-id').textContent = cardData.cardNumber; // 设置货号
-        document.getElementById('series-name').textContent = cardData.series; // 设置系列名称
-        document.getElementById('team').textContent = cardData.team; // 设置战队
-        document.getElementById('parallel').textContent = cardData.parallel; // 设置平行
-        document.getElementById('card-type').textContent = cardData.cardType; // 设置卡种
+    let currentCard = null;
+
+    function syncFavButton() {
+        if (!currentCard) return;
+        const active = LPLVault.isFavorite(currentCard.id);
+        const btn = document.getElementById('detailFavBtn');
+        btn.textContent = active ? '已收藏' : '收藏卡片';
+        btn.style.borderColor = active ? 'var(--color-moss)' : '';
+        btn.style.color = active ? 'var(--color-moss)' : '';
     }
-</script>
 
+    function renderCardDetail(card) {
+        currentCard = card;
+        const grade = String(card.grade || 'A').toUpperCase();
+
+        document.title = `${card.team} · ${card.playerName} — LPL Vault`;
+
+        const bcTeam = document.getElementById('bcTeam');
+        bcTeam.textContent = card.team || 'LPL';
+        bcTeam.href = `search.html?team=${encodeURIComponent(card.team || '')}`;
+        document.getElementById('bcPlayer').textContent = card.playerName || '详情';
+
+        const imgSrc = LPLVault.getCardImageSrc(card.img_url);
+        document.getElementById('cardImage').src = imgSrc;
+        document.getElementById('cardImage').alt = `${card.team} ${card.playerName}`;
+        document.getElementById('zoomImage').src = imgSrc;
+
+        document.getElementById('slabNumber').textContent = card.cardNumber || `LPL-${card.id}`;
+        const slabGrade = document.getElementById('slabGrade');
+        slabGrade.textContent = LPLVault.gradeLabel(grade);
+        slabGrade.className = `card-grade-tag grade-${grade}`;
+        document.getElementById('reviewStatus').textContent = card.reviewed !== false ? '已通过基础核验' : '待核验';
+
+        document.getElementById('detailMetaLabel').textContent = `${card.team || 'LPL'} · GRADE ${grade}${card.limited ? ' · LIMITED' : ''}`;
+        document.getElementById('cardTitle').textContent = `${card.team || 'LPL'} · ${card.playerName || '选手卡'}`;
+        document.getElementById('cardSubtitle').textContent = `${LPLVault.getTeamFullName(card.team)} · ${LPLVault.formatSeriesText(card)}`;
+        document.getElementById('cardPrice').textContent = LPLVault.formatPrice(card.price);
+        document.getElementById('sellerName').textContent = card.sellerId ? `持仓账号 #${card.sellerId}` : '官方持仓';
+
+        const specs = [
+            { label: '发售年份', value: card.releaseYear ? `${card.releaseYear} 赛季` : '—' },
+            { label: '官方卡号', value: card.cardNumber || '—' },
+            { label: '所属系列', value: card.series || '—' },
+            { label: '出品发行', value: card.publisher || '—' },
+            { label: '所属战队', value: `${card.team || '—'} · ${LPLVault.getTeamFullName(card.team)}` },
+            { label: '平行工艺', value: card.parallel || '—' },
+            { label: '卡片种类', value: card.cardType || '—' },
+            { label: '发行属性', value: `${card.limited ? '限量编号' : '常规发行'} / ${card.autograph ? '含亲签' : '无亲签'}` }
+        ];
+        document.getElementById('specsGrid').innerHTML = specs.map(s => `
+            <div class="spec-row">
+                <span class="spec-label">${LPLVault.escapeHtml(s.label)}</span>
+                <span class="spec-val">${LPLVault.escapeHtml(s.value)}</span>
+            </div>
+        `).join('');
+
+        syncFavButton();
+    }
+
+    document.getElementById('detailFavBtn').addEventListener('click', () => {
+        if (!currentCard) return;
+        const added = LPLVault.toggleFavorite(currentCard.id);
+        syncFavButton();
+        LPLVault.showToast(added ? `已收藏 ${currentCard.team} · ${currentCard.playerName}` : '已移出收藏夹', added ? 'success' : 'info');
+    });
+
+    const zoomModal = document.getElementById('zoomModal');
+    function openZoom() { zoomModal.classList.add('open'); }
+    function closeZoom() { zoomModal.classList.remove('open'); }
+    document.getElementById('openZoomBtn').addEventListener('click', openZoom);
+    document.getElementById('openZoomTextBtn').addEventListener('click', openZoom);
+    document.getElementById('closeZoomBtn').addEventListener('click', closeZoom);
+    zoomModal.addEventListener('click', (e) => { if (e.target === zoomModal) closeZoom(); });
+
+    const buyModal = document.getElementById('buyModal');
+    document.getElementById('buyBtn').addEventListener('click', () => {
+        if (!currentCard) return;
+        const user = LPLVault.getUser();
+        if (!user) {
+            LPLVault.showToast('请先登录后再下单购买', 'info');
+            setTimeout(() => {
+                window.location.href = `login.html?redirect=${encodeURIComponent(window.location.pathname + window.location.search)}`;
+            }, 700);
+            return;
+        }
+        document.getElementById('modalThumb').src = LPLVault.getCardImageSrc(currentCard.img_url);
+        document.getElementById('modalTitle').textContent = `${currentCard.team} · ${currentCard.playerName}`;
+        document.getElementById('modalSub').textContent = `${currentCard.cardNumber || ''} · ${LPLVault.gradeLabel(currentCard.grade)}`;
+        document.getElementById('modalPrice').textContent = LPLVault.formatPrice(currentCard.price);
+        buyModal.classList.add('open');
+    });
+
+    document.getElementById('cancelBuyBtn').addEventListener('click', () => buyModal.classList.remove('open'));
+    buyModal.addEventListener('click', (e) => { if (e.target === buyModal) buyModal.classList.remove('open'); });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            buyModal.classList.remove('open');
+            zoomModal.classList.remove('open');
+        }
+    });
+
+    document.getElementById('confirmBuyBtn').addEventListener('click', async () => {
+        const user = LPLVault.getUser();
+        if (!user || !currentCard) return;
+        const btn = document.getElementById('confirmBuyBtn');
+        btn.disabled = true;
+        btn.textContent = '提交中…';
+        try {
+            const oldUserId = currentCard.sellerId || 1;
+            const newUserId = user.id || 1;
+            const res = await fetch(`/product/select_and_update?productId=${encodeURIComponent(currentCard.id)}&oldUserId=${encodeURIComponent(oldUserId)}&newUserId=${encodeURIComponent(newUserId)}`);
+            if (!res.ok) throw new Error('下单失败');
+            LPLVault.addOrder(currentCard, user);
+            buyModal.classList.remove('open');
+            LPLVault.showToast(`已收入个人卡库：${currentCard.team} · ${currentCard.playerName}`, 'success');
+            document.getElementById('sellerName').textContent = `当前归属：${user.username || user.name}`;
+        } catch (err) {
+            console.error(err);
+            LPLVault.showToast('提交订单失败，请稍后重试', 'error');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = '确认收入卡库';
+        }
+    });
+
+    (async function init() {
+        const params = new URLSearchParams(window.location.search);
+        const queryId = params.get('id');
+        let cardData = null;
+
+        try {
+            if (queryId) {
+                cardData = await LPLVault.fetchCardById(queryId);
+            }
+            if (!cardData) {
+                const cached = sessionStorage.getItem('card');
+                if (cached) {
+                    const parsed = JSON.parse(cached);
+                    cardData = parsed.id ? (await LPLVault.fetchCardById(parsed.id)) || parsed : parsed;
+                }
+            }
+            if (!cardData) {
+                cardData = await LPLVault.fetchCardById(4);
+            }
+            if (cardData) {
+                renderCardDetail(cardData);
+            } else {
+                document.getElementById('cardTitle').textContent = '未找到该卡片';
+            }
+        } catch (err) {
+            console.error(err);
+            LPLVault.showToast('加载卡片详情失败', 'error');
+        }
+
+        try {
+            let recs = await LPLVault.fetchRecommendations();
+            const currentId = currentCard ? Number(currentCard.id) : null;
+            recs = recs.filter(item => Number(item.id) !== currentId);
+            if (recs.length < 3) {
+                const all = await LPLVault.fetchCardList({ sort: 'price_desc' });
+                const seen = new Set(recs.map(r => Number(r.id)));
+                if (currentId !== null) seen.add(currentId);
+                for (const item of all) {
+                    if (!seen.has(Number(item.id))) {
+                        recs.push(item);
+                        seen.add(Number(item.id));
+                        if (recs.length >= 3) break;
+                    }
+                }
+            }
+            const recGrid = document.getElementById('recGrid');
+            recGrid.innerHTML = '';
+            recs.slice(0, 3).forEach(item => recGrid.appendChild(LPLVault.createTradingCardElement(item)));
+        } catch (err) {
+            console.error(err);
+        }
+    })();
+</script>
 </body>
 </html>

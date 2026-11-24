@@ -27,6 +27,11 @@
             <artifactId>mysql-connector-j</artifactId>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -76,7 +81,6 @@
                 <version>${spring-boot.version}</version>
                 <configuration>
                     <mainClass>com.example.cardexchange.CardexchangeApplication</mainClass>
-                    <skip>true</skip>
                 </configuration>
                 <executions>
                     <execution>

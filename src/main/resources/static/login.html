@@ -3,204 +3,357 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>登录页面</title>
+    <title>登录 · LPL Vault</title>
+    <link rel="stylesheet" href="css/app.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #fff;
-        }
-
-        .container {
-            width: 100%;
-            height: 100vh;
+        .auth-page {
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
         }
 
-        .header {
-            width: 100%;
-            padding: 20px;
-            text-align: center;
-            font-size: 20px;
-            color: #333;
-            font-weight: bold;
+        .auth-topbar {
+            border-bottom: 1px solid var(--border-quiet);
+        }
+
+        .auth-topbar-inner {
+            height: 80px;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: space-between;
         }
 
-        .header img {
-            width: 80px;
-            margin-right: 10px;
-        }
-
-        .main-content {
-            width: 100%;
+        .auth-main {
+            flex: 1;
             display: flex;
-            justify-content: center;
             align-items: center;
-            background-color: #e60012;
-            height: 80%;
+            padding: var(--spacing-80) 0;
+        }
+
+        .auth-grid {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 5fr 7fr;
+            gap: var(--spacing-56);
+            align-items: center;
+        }
+
+        .auth-editorial {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-24);
+        }
+
+        .auth-editorial h1 {
+            font-size: var(--text-display);
+            font-weight: var(--font-weight-light);
+            line-height: var(--leading-display);
+            letter-spacing: var(--tracking-display);
+        }
+
+        .auth-editorial p {
+            font-size: var(--text-body);
+            color: var(--color-wood);
+            max-width: 28em;
+        }
+
+        .auth-photo {
+            margin-top: var(--spacing-16);
+            border: 1px solid var(--border-quiet);
+            border-radius: var(--radius-cards);
+            padding: var(--spacing-16);
+            background: var(--surface-soft-white);
+        }
+
+        .auth-photo img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            display: block;
+            border-radius: var(--radius-cards);
+            filter: saturate(0.82) contrast(0.96);
+        }
+
+        .auth-card {
+            background: var(--surface-soft-white);
+            border: 1px solid var(--border-quiet);
+            border-radius: var(--radius-cards);
+            padding: var(--card-padding);
+            max-width: 480px;
+            width: 100%;
+            justify-self: end;
+            transition: border-color var(--transition-quiet);
+        }
+
+        .auth-card:hover {
+            border-color: var(--border-hover);
+        }
+
+        .auth-card h2 {
+            font-size: var(--text-heading);
+            font-weight: var(--font-weight-light);
+            margin-bottom: var(--spacing-8);
+        }
+
+        .auth-lead {
+            font-size: var(--text-body);
+            color: var(--color-wood);
+            margin-bottom: var(--spacing-40);
+        }
+
+        .demo-note {
+            padding: var(--spacing-16);
+            margin-bottom: var(--spacing-24);
+            border: 1px solid var(--border-divider);
+            border-radius: var(--radius-cards);
+            background: rgba(245, 240, 235, 0.65);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--spacing-16);
+            font-size: 13px;
+            color: var(--color-wood);
+        }
+
+        .field {
+            margin-bottom: var(--spacing-24);
+        }
+
+        .field label {
+            display: block;
+            font-size: var(--text-label);
+            letter-spacing: var(--tracking-label);
+            color: var(--color-wood);
+            margin-bottom: var(--spacing-8);
+        }
+
+        .pwd-wrap {
             position: relative;
         }
 
-        .main-content img {
-            width: 100%;
-            height: auto;
-        }
-
-        .login-box {
+        .pwd-toggle {
             position: absolute;
-            right: 15%;
-            background-color: #fff;
-            width: 350px;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .login-box h2 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 24px;
-        }
-
-        .login-box input[type="text"],
-        .login-box input[type="password"] {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        .login-box button {
-            width: 100%;
-            padding: 12px;
-            background-color: #e60012;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
             border: none;
-            color: #fff;
-            font-size: 16px;
-            border-radius: 4px;
+            font-size: var(--text-label);
+            letter-spacing: 0.08em;
+            color: var(--color-grey-blue);
             cursor: pointer;
-            margin-top: 10px;
+            padding: 4px 0;
+            transition: color var(--transition-quiet);
         }
 
-        .login-box button:hover {
-            background-color: #d00010;
+        .pwd-toggle:hover {
+            color: var(--color-moss);
         }
 
-        .login-box label {
-            font-size: 14px;
+        .agreement-row {
             display: flex;
-            align-items: center;
-            color: #333;
-            margin-top: 10px;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 13px;
+            color: var(--color-wood);
+            margin: var(--spacing-24) 0 var(--spacing-40);
         }
 
-        .login-box label input {
-            margin-right: 5px;
+        .agreement-row input {
+            margin-top: 5px;
+            accent-color: var(--color-moss);
         }
 
-        .login-box a {
-            color: #e60012;
-            text-decoration: none;
+        .agreement-row a {
+            color: var(--color-grey-blue);
         }
 
-        .login-box .links {
+        .agreement-row a:hover {
+            color: var(--color-moss);
+        }
+
+        .form-error {
+            display: none;
+            margin-bottom: var(--spacing-24);
+            padding: 12px 16px;
+            border: 1px solid rgba(201, 168, 140, 0.7);
+            border-left: 2px solid var(--color-charcoal);
+            border-radius: var(--radius-cards);
+            background: rgba(201, 168, 140, 0.14);
+            color: var(--color-charcoal);
+            font-size: 13px;
+        }
+
+        .form-error.show { display: block; }
+
+        .auth-footer {
+            margin-top: var(--spacing-40);
+            padding-top: var(--spacing-24);
+            border-top: 1px solid var(--border-quiet);
             display: flex;
             justify-content: space-between;
-            margin-top: 10px;
-            font-size: 14px;
-        }
-        .agreement {
-            display: flex;
             align-items: center;
-            font-size: 14px;
-            color: #333;
+            font-size: var(--text-body);
+            color: var(--color-wood);
         }
 
-        .agreement input[type="checkbox"] {
-            margin-right: 5px;
+        @media (max-width: 860px) {
+            .auth-grid {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-40);
+            }
+            .auth-card {
+                justify-self: start;
+                max-width: 100%;
+            }
+            .auth-photo {
+                display: none;
+            }
         }
-
     </style>
 </head>
-<body>
+<body class="auth-page">
 
-<div class="container">
-    <div class="header">
-        <span>欢迎登录</span>
+<header class="auth-topbar">
+    <div class="container auth-topbar-inner">
+        <a href="home.html" class="brand-link">
+            <span class="brand-title">LPL Vault</span>
+            <span class="brand-sub">Archive</span>
+        </a>
+        <a href="home.html" class="text-link">返回交易大厅</a>
     </div>
+</header>
 
-    <div class="main-content">
-        <img src="image/1.jpg" alt="背景图">
-        <div class="login-box">
-            <h2>登录</h2>
-            <form id="loginForm">
-                <input type="text" id="username" placeholder="账号" required>
-                <input type="password" id="password" placeholder="登录密码" required>
-                <button type="submit">登录</button>
-
-                <label class="agreement">
-                    <input type="checkbox" checked>
-                    我已阅读并同意 <a href="#"><span style="font-size: 10px">《用户服务协议》</span></a> 和 <a href="asserts/privacy_policy.txt" ><span style="font-size: 10px">《隐私政策》</span></a>
-                </label>
-                <div class="links">
-                    <a href="#">忘记密码</a>
-                    <a id="registerLink" href="register.html">没有账号，请立即注册</a>
+<main class="auth-main">
+    <div class="container">
+        <div class="auth-grid">
+            <section class="auth-editorial">
+                <span class="label-text">Collector Access</span>
+                <h1>回到你的<br>LPL 选手卡库</h1>
+                <p>登录后可查看持仓卡片、管理本地收藏与提交担保订单。界面保持安静，把注意力留给藏品本身。</p>
+                <div class="auth-photo">
+                    <img src="image/board2.jpg" alt="LPL 选手卡实拍">
                 </div>
-            </form>
+            </section>
+
+            <section class="auth-card">
+                <h2>账号登录</h2>
+                <p class="auth-lead">输入用户名与密码继续浏览</p>
+
+                <div class="demo-note">
+                    <span>演示账号：demo / 123456</span>
+                    <button type="button" class="text-link" id="fillDemoBtn" style="font-size:13px;">一键填入</button>
+                </div>
+
+                <div class="form-error" id="formError" role="alert"></div>
+
+                <form id="loginForm">
+                    <div class="field">
+                        <label for="username">USERNAME / 账号</label>
+                        <input type="text" class="line-input" id="username" placeholder="请输入用户名" required autocomplete="username">
+                    </div>
+
+                    <div class="field">
+                        <label for="password">PASSWORD / 密码</label>
+                        <div class="pwd-wrap">
+                            <input type="password" class="line-input" id="password" placeholder="请输入登录密码" required autocomplete="current-password" style="padding-right:48px;">
+                            <button type="button" class="pwd-toggle" id="togglePwd">显示</button>
+                        </div>
+                    </div>
+
+                    <label class="agreement-row">
+                        <input type="checkbox" id="agreement" checked>
+                        <span>我已阅读并同意 <a href="asserts/privacy_policy.txt" target="_blank">《隐私政策》</a></span>
+                    </label>
+
+                    <button type="submit" class="quiet-btn" id="submitBtn" style="width:100%;">登录</button>
+                </form>
+
+                <div class="auth-footer">
+                    <span>还没有账号？</span>
+                    <a href="register.html" class="text-link">前往注册 &rarr;</a>
+                </div>
+            </section>
         </div>
     </div>
-</div>
+</main>
 
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
+<script src="js/common.js"></script>
 <script>
+    const formError = document.getElementById('formError');
+    function showError(msg) {
+        formError.textContent = msg;
+        formError.classList.add('show');
+    }
+    function clearError() {
+        formError.classList.remove('show');
+    }
 
-
-    // 注册跳转逻辑
-    document.getElementById('registerLink').addEventListener('click', function() {
-        window.location.href = 'register.html';  // 跳转到注册页面
+    document.getElementById('fillDemoBtn').addEventListener('click', () => {
+        document.getElementById('username').value = 'demo';
+        document.getElementById('password').value = '123456';
+        clearError();
+        LPLVault.showToast('已填入演示账号 demo / 123456', 'info');
     });
 
-    // 登录表单提交逻辑
-    document.getElementById('loginForm').addEventListener('submit', function(event) {
-        event.preventDefault();  // 阻止表单的默认提交行为
+    const togglePwd = document.getElementById('togglePwd');
+    togglePwd.addEventListener('click', () => {
+        const pwd = document.getElementById('password');
+        const showing = pwd.type === 'text';
+        pwd.type = showing ? 'password' : 'text';
+        togglePwd.textContent = showing ? '显示' : '隐藏';
+    });
 
-        var username = document.getElementById('username').value;
-        var password = document.getElementById('password').value;
+    document.getElementById('loginForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        clearError();
 
-        // 构建表单数据
-        var formData = new URLSearchParams();
-        formData.append('username', username);
-        formData.append('password', password);
+        if (!document.getElementById('agreement').checked) {
+            showError('请先勾选同意隐私政策');
+            return;
+        }
 
-        // 调用后端接口进行验证
-        axios.post('http://localhost:8080/users/login', formData)
-            .then(function(response) {
-                if (response.data.message === 'success') { // 假设后端返回的响应对象中有一个status字段
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value;
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.textContent = '验证中…';
 
+        try {
+            const formData = new URLSearchParams();
+            formData.append('username', username);
+            formData.append('password', password);
 
-                    window.location.href = 'home.html';
-                } else {
-                    alert('登录失败：' + response.data.message);
-                }
-            })
-            .catch(function(error) {
-                console.error('登录请求出错:', error);
-                alert('登录请求出错，请稍后再试');
+            const res = await fetch('/users/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: formData
             });
+            const payload = await res.json();
+
+            if (payload.code === 200 || payload.message === 'success') {
+                const rawUser = (payload.data && payload.data.user) ? payload.data.user : {};
+                LPLVault.setUser({
+                    id: rawUser.id || 1,
+                    username: rawUser.name || rawUser.username || username,
+                    email: rawUser.email || ''
+                });
+                LPLVault.showToast('登录成功', 'success');
+                const redirect = new URLSearchParams(window.location.search).get('redirect');
+                setTimeout(() => {
+                    window.location.href = redirect || 'home.html';
+                }, 550);
+            } else {
+                const errMsg = (payload.data && payload.data.message) || payload.message || '账号或密码错误';
+                showError(errMsg);
+            }
+        } catch (err) {
+            console.error(err);
+            showError('无法连接到登录服务，请确认后端正在运行');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = '登录';
+        }
     });
 </script>
 </body>

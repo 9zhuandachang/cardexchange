@@ -28,4 +28,17 @@ public class CardController {
     @GetMapping("/recomendtions")
     public List<CardVo> searchRecomendtions() { return cardService.searchRecomendtions();}
 
+    @GetMapping("/list")
+    public List<CardVo> listCards(
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(value = "team", required = false) String team,
+            @RequestParam(value = "grade", required = false) String grade,
+            @RequestParam(value = "sort", required = false) String sort) {
+        return cardService.listCards(keyword, team, grade, sort);
+    }
+
+    @GetMapping("/user/{userId}")
+    public List<CardVo> listUserCards(@PathVariable("userId") Long userId) {
+        return cardService.listUserCards(userId);
+    }
 }

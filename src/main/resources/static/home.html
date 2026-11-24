@@ -3,343 +3,466 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>商品展示页面</title>
+    <title>LPL Vault · 英雄联盟选手卡集换空间</title>
+    <link rel="stylesheet" href="css/app.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-
-        /* 顶部导航栏 */
-        .navbar {
-            background-color: #fff;
-            padding: 10px 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            display: flex;
-            justify-content: space-between;
+        /* Asymmetric 5:7 Hero */
+        .hero-section {
+            padding-top: var(--spacing-80);
+            display: grid;
+            grid-template-columns: 5fr 7fr;
+            gap: var(--spacing-56);
             align-items: center;
         }
 
-        .logo {
-            font-size: 24px;
-            color: #007bff;
+        .hero-copy {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-24);
         }
 
-        .search-bar {
+        .hero-title {
+            font-size: var(--text-display);
+            font-weight: var(--font-weight-light);
+            line-height: var(--leading-display);
+            letter-spacing: var(--tracking-display);
+            color: var(--color-charcoal);
+        }
+
+        .hero-desc {
+            font-size: var(--text-body);
+            font-weight: var(--font-weight-light);
+            line-height: var(--leading-body);
+            color: var(--color-wood);
+            max-width: 34em;
+        }
+
+        .hero-actions {
             display: flex;
             align-items: center;
-            width: 50%;
-        }
-
-        .search-bar input[type="text"] {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        .search-bar button {
-            background-color: #007bff;
-            color: white;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-left: 5px;
-        }
-
-        .search-bar button:hover {
-            background-color: #0056b3;
-        }
-
-        /* 轮播图区域 */
-        .banner {
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-            height: 250px;
-        }
-
-        .slider {
-            display: flex;
-            transition: transform 0.5s ease-in-out;
-        }
-
-        .slide {
-            min-width: 100%;
-            height: 250px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-
-        .slide-content {
-            color: white;
-            text-align: center;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 10px 20px;
-            border-radius: 5px;
-        }
-
-        .prev, .next {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            font-size: 24px;
-            padding: 10px;
-            cursor: pointer;
-            border: none;
-            border-radius: 50%;
-        }
-
-        .prev { left: 10px; }
-        .next { right: 10px; }
-
-        /* 商品展示区域 */
-        .product-list {
-            display: flex;
+            gap: var(--spacing-24);
             flex-wrap: wrap;
-            justify-content: space-between;
-            padding: 20px;
-            margin: 0 200px;
+            padding-top: var(--spacing-8);
         }
 
-        .product-card {
-            width: 20%;
-            margin-bottom: 20px;
-            background-color: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            overflow: hidden;
-
-        }
-
-        .product-card img {
-            width: 100%; /* 使图片宽度适应卡片宽度 */
-            height: auto; /* 保持图片的宽高比 */
-            object-fit: cover; /* 如果需要，可以裁剪图片以覆盖整个容器 */
-        }
-
-        .product-card .title {
-            font-size: 16px;
-            margin: 10px;
-            font-weight: bold;
-        }
-
-        .product-card .price {
-            font-size: 14px;
-            color: #007bff;
-            margin: 10px;
-        }
-
-        .product-card .details {
+        .hero-metrics {
+            margin-top: var(--spacing-16);
+            padding-top: var(--spacing-24);
+            border-top: 1px solid var(--border-divider);
             display: flex;
+            gap: var(--spacing-40);
+            flex-wrap: wrap;
+        }
+
+        .hero-metric-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .hero-metric-val {
+            font-size: var(--text-heading);
+            font-weight: var(--font-weight-extralight);
+            line-height: 1.2;
+            color: var(--color-charcoal);
+        }
+
+        .hero-metric-lbl {
+            font-size: var(--text-label);
+            letter-spacing: var(--tracking-label);
+            color: var(--color-wood);
+        }
+
+        /* Quiet Gallery Frame */
+        .hero-gallery {
+            background: var(--surface-soft-white);
+            border: 1px solid var(--border-quiet);
+            border-radius: var(--radius-cards);
+            padding: var(--spacing-24);
+            transition: border-color var(--transition-quiet);
+        }
+
+        .hero-gallery:hover {
+            border-color: var(--border-hover);
+        }
+
+        .hero-photo-stage {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-top: 64%;
+            overflow: hidden;
+            border-radius: var(--radius-cards);
+            background: rgba(201, 168, 140, 0.14);
+        }
+
+        .hero-photo-slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity var(--transition-quiet);
+        }
+
+        .hero-photo-slide.active {
+            opacity: 1;
+        }
+
+        .hero-photo-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            filter: saturate(0.84) contrast(0.96);
+        }
+
+        .hero-gallery-caption {
+            margin-top: var(--spacing-16);
+            display: flex;
+            align-items: center;
             justify-content: space-between;
-            padding: 10px;
-            background-color: #f8f8f8;
+            gap: var(--spacing-16);
         }
 
-        .product-card .details span {
-            font-size: 14px;
-            color: #555;
+        .gallery-caption-text {
+            font-size: var(--text-label);
+            letter-spacing: 0.08em;
+            color: var(--color-wood);
         }
 
-        .footer {
-            background-color: #fff;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        .gallery-switch {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-16);
+        }
+
+        .gallery-switch button {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid transparent;
+            padding: 2px 0;
+            font-size: var(--text-label);
+            letter-spacing: var(--tracking-label);
+            color: var(--color-wood);
+            cursor: pointer;
+            transition: color var(--transition-quiet), border-color var(--transition-quiet);
+        }
+
+        .gallery-switch button:hover {
+            color: var(--color-moss);
+        }
+
+        .gallery-switch button.active {
+            color: var(--color-charcoal);
+            border-bottom-color: var(--color-moss);
+        }
+
+        /* Marketplace Section */
+        .section-head {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: var(--spacing-24);
+            flex-wrap: wrap;
+            margin-bottom: var(--spacing-40);
+        }
+
+        .section-heading {
+            font-size: var(--text-heading);
+            font-weight: var(--font-weight-light);
+            line-height: var(--leading-heading);
+            color: var(--color-charcoal);
+        }
+
+        .section-meta {
+            font-size: var(--text-body);
+            font-weight: var(--font-weight-light);
+            color: var(--color-wood);
+        }
+
+        .filter-bar {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: var(--spacing-40);
+            flex-wrap: wrap;
+            padding-bottom: var(--spacing-24);
+            margin-bottom: var(--spacing-40);
+            border-bottom: 1px solid var(--border-divider);
+        }
+
+        .filter-tabs {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-24);
+            flex-wrap: wrap;
+        }
+
+        .quiet-tab {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid transparent;
+            padding: 6px 0;
+            font-size: var(--text-body);
+            font-weight: var(--font-weight-light);
+            color: var(--color-wood);
+            cursor: pointer;
+            transition: color var(--transition-quiet), border-color var(--transition-quiet);
+        }
+
+        .quiet-tab:hover {
+            color: var(--color-moss);
+        }
+
+        .quiet-tab.active {
+            color: var(--color-charcoal);
+            border-bottom-color: var(--color-moss);
+        }
+
+        .filter-controls-right {
+            display: flex;
+            align-items: flex-end;
+            gap: var(--spacing-24);
+            flex-wrap: wrap;
+        }
+
+        .sort-wrap {
+            width: 150px;
+        }
+
+        @media (max-width: 860px) {
+            .hero-section {
+                grid-template-columns: 1fr;
+                padding-top: var(--spacing-40);
+                gap: var(--spacing-40);
+            }
         }
     </style>
 </head>
 <body>
 
-<!-- 顶部导航栏 -->
-<div class="navbar">
-    <div class="logo">LOGO</div>
-    <div class="search-bar">
-        <input type="text" id="searchInput" placeholder="搜索战队、选手、系列、年份">
-        <button id="searchButton">搜索</button>
-    </div>
-</div>
+<header id="site-header"></header>
 
-<!-- 滚动展示区域 -->
-<div class="banner">
-    <div class="slider">
-
-        <div class="slide" style="background-image: url('image/board1.jpg');">
-            <div class="slide-content">
-                <h1> L P L  明 星 选 手</h1>
-
+<main class="container">
+    <!-- Breathing Asymmetric 5:7 Hero -->
+    <section class="hero-section">
+        <div class="hero-copy">
+            <span class="label-text">2024 LPL Collectibles</span>
+            <h1 class="hero-title">安静收藏每一张<br>赛场典藏选手卡</h1>
+            <p class="hero-desc">
+                收录 BLG、TES、WBG、JDG、EDG 等战队 2024 赛季官方选手卡。去除喧嚣与干扰，以清晰卡面、真实挂牌价与克制秩序呈现集换体验。
+            </p>
+            <div class="hero-actions">
+                <a href="#catalog" class="quiet-btn">浏览在售卡库</a>
+                <button type="button" class="quiet-btn quiet-btn-outline" id="heroRecognizeBtn">以图识选手</button>
+                <a href="search.html" class="text-link">组合检索 &rarr;</a>
+            </div>
+            <div class="hero-metrics">
+                <div class="hero-metric-item">
+                    <span class="hero-metric-val tabular" id="statTotalCards">—</span>
+                    <span class="hero-metric-lbl">在售卡片</span>
+                </div>
+                <div class="hero-metric-item">
+                    <span class="hero-metric-val tabular" id="statSGrade">—</span>
+                    <span class="hero-metric-lbl">S 级典藏</span>
+                </div>
+                <div class="hero-metric-item">
+                    <span class="hero-metric-val tabular" id="statTeams">—</span>
+                    <span class="hero-metric-lbl">覆盖战队</span>
+                </div>
             </div>
         </div>
-        <div class="slide" style="background-image: url('image/board2.jpg');">
-            <div class="slide-content">
-                <h1>L P L 17 支 队 伍</h1>
 
+        <div class="hero-gallery">
+            <div class="hero-photo-stage">
+                <div class="hero-photo-slide active" data-caption="2024 LPL 战队折射卡 · 自然光实拍">
+                    <img src="image/board2.jpg" alt="LPL 战队收藏卡实拍">
+                </div>
+                <div class="hero-photo-slide" data-caption="LPL Masterpiece 明星选手典藏系列">
+                    <img src="image/board1.jpg" alt="LPL 明星选手典藏卡">
+                </div>
+            </div>
+            <div class="hero-gallery-caption">
+                <span class="gallery-caption-text" id="galleryCaption">2024 LPL 战队折射卡 · 自然光实拍</span>
+                <div class="gallery-switch" role="tablist" aria-label="切换展示图">
+                    <button type="button" class="active" data-idx="0">01</button>
+                    <button type="button" data-idx="1">02</button>
+                </div>
             </div>
         </div>
-    </div>
-    <button class="prev">&#10094;</button>
-    <button class="next">&#10095;</button>
-</div>
+    </section>
 
-<!-- 商品展示区域 -->
-<div class="product-list" id="product-list"></div>
+    <hr class="breathing-divider">
 
-<!-- 底部区域 -->
-<!--<div class="footer">-->
-<!--    <p>&copy; 2024 Card Show Exhibition</p>-->
-<!--</div>-->
+    <!-- Catalog Breathing Section -->
+    <section id="catalog">
+        <div class="section-head">
+            <div>
+                <span class="label-text" style="display:block;margin-bottom:8px;">Catalog</span>
+                <h2 class="section-heading">在售选手卡一览</h2>
+            </div>
+            <span class="section-meta" id="resultMeta">正在加载馆藏列表…</span>
+        </div>
+
+        <div class="filter-bar">
+            <div class="filter-tabs" id="teamTabs" role="tablist" aria-label="按战队筛选"></div>
+            <div class="filter-controls-right">
+                <div class="filter-tabs" id="gradeTabs" role="tablist" aria-label="按评级筛选">
+                    <button type="button" class="quiet-tab active" data-grade="ALL">全部评级</button>
+                    <button type="button" class="quiet-tab" data-grade="S">S 级</button>
+                    <button type="button" class="quiet-tab" data-grade="A">A 级</button>
+                    <button type="button" class="quiet-tab" data-grade="B">B 级</button>
+                </div>
+                <div class="sort-wrap">
+                    <select class="line-select" id="sortSelect" aria-label="排序方式">
+                        <option value="price_desc">价格从高到低</option>
+                        <option value="price_asc">价格从低到高</option>
+                        <option value="grade">按评级优先</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-grid" id="cardGrid">
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+        </div>
+    </section>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="js/common.js"></script>
 <script>
-    // Sample function to simulate the API request
-    async function fetchCardData() {
-        const cardIds = Array.from({ length: 8 }, (_, i) => i + 1); // Generate random card IDs (1-16)
+    LPLVault.renderNavbar('home');
+    LPLVault.renderFooter();
+    document.getElementById('heroRecognizeBtn').addEventListener('click', () => LPLVault.openRecognizeModal());
 
-        const cardPromises = cardIds.map(id => {
-            return fetch(`card/search_by_id?id=${id}`) // Replace with your API endpoint
-                .then(response => response.json())
+    /* Quiet Hero Image Switch */
+    (function initGallerySwitch() {
+        const slides = Array.from(document.querySelectorAll('.hero-photo-slide'));
+        const buttons = Array.from(document.querySelectorAll('.gallery-switch button'));
+        const caption = document.getElementById('galleryCaption');
 
-                .catch(error => console.error('Error fetching card data:', error));
-        });
-
-        const cards = await Promise.all(cardPromises); // Wait for all fetch requests to complete
-
-        renderCards(cards); // Render the cards
-    }
-
-    function renderCards(cards) {
-        const productList = document.getElementById('product-list');
-        productList.innerHTML = ''; // 清空现有内容
-
-        cards.forEach(card => {
-            const productCard = document.createElement('div');
-            productCard.classList.add('product-card');
-
-            const img = document.createElement('img');
-            img.src = `lpl卡片/${card.img_url}.png`; // 使用 card.img_url 动态生成图片路径
-            img.alt = `${card.playerName} Card Image`;
-
-            const title = document.createElement('div');
-            title.classList.add('title');
-            title.textContent = `${card.releaseYear} ${card.publisher} ${card.playerName}`;
-
-            const details = document.createElement('div');
-            details.classList.add('details');
-            details.innerHTML = `
-            <p><strong>Team:</strong> ${card.team}</p>
-            <p><strong>Release Year:</strong> ${card.releaseYear}</p>
-            <p><strong>Player Name:</strong> ${card.playerName}</p>
-        `;
-
-            // 将所有元素加入卡片容器
-            productCard.appendChild(img);
-            productCard.appendChild(title);
-            productCard.appendChild(details);
-
-            // 为每个卡片添加点击事件
-            productCard.addEventListener('click', function () {
-                // 使用 card.id 动态生成 API 请求
-                fetch(`card/search_by_id?id=${card.id}`, {
-                    method: 'GET', // GET 请求
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        // 将获取的数据存储到 sessionStorage
-                        sessionStorage.setItem('card', JSON.stringify(data));
-                        // 跳转到 detail.html 页面
-                        window.location.href = 'detail.html';
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
-            });
-
-            productList.appendChild(productCard); // 将卡片添加到 productList 容器中
-        });
-    }
-
-
-    // Call the function to fetch and render cards when the page loads
-    fetchCardData();
-
-
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        let slides = document.querySelectorAll(".slide");
-        let currentIndex = 0;
-
-        function showSlide(index) {
-            slides.forEach((slide, i) => {
-                slide.classList.toggle("active", i === index);
-            });
-            document.querySelector(".slider").style.transform = `translateX(-${index * 100}%)`;
+        function select(idx) {
+            slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+            buttons.forEach((b, i) => b.classList.toggle('active', i === idx));
+            caption.textContent = slides[idx].dataset.caption || '';
         }
 
-        document.querySelector(".prev").addEventListener("click", () => {
-            currentIndex = (currentIndex === 0) ? slides.length - 1 : currentIndex - 1;
-            showSlide(currentIndex);
+        buttons.forEach(btn => {
+            btn.addEventListener('click', () => select(Number(btn.dataset.idx)));
+        });
+    })();
+
+    let allCards = [];
+    const state = {
+        team: 'ALL',
+        grade: 'ALL',
+        sort: 'price_desc'
+    };
+
+    function buildTeamTabs(cards) {
+        const teams = Array.from(new Set(cards.map(c => c.team).filter(Boolean))).sort();
+        const host = document.getElementById('teamTabs');
+        host.innerHTML = '';
+
+        ['ALL', ...teams].forEach(team => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = `quiet-tab ${state.team === team ? 'active' : ''}`;
+            btn.dataset.team = team;
+            btn.textContent = team === 'ALL' ? '全部战队' : team;
+            btn.addEventListener('click', () => {
+                state.team = team;
+                host.querySelectorAll('.quiet-tab').forEach(b => b.classList.toggle('active', b.dataset.team === team));
+                renderCatalog();
+            });
+            host.appendChild(btn);
+        });
+    }
+
+    function renderCatalog() {
+        const grid = document.getElementById('cardGrid');
+        const meta = document.getElementById('resultMeta');
+
+        let filtered = allCards.filter(c => {
+            if (state.team !== 'ALL' && (c.team || '').toUpperCase() !== state.team.toUpperCase()) return false;
+            if (state.grade !== 'ALL' && String(c.grade || '').toUpperCase() !== state.grade) return false;
+            return true;
         });
 
-        document.querySelector(".next").addEventListener("click", () => {
-            currentIndex = (currentIndex + 1) % slides.length;
-            showSlide(currentIndex);
-        });
+        const gradeRank = g => ({ S: 1, A: 2, B: 3 }[String(g || '').toUpperCase()] || 9);
+        if (state.sort === 'price_desc') {
+            filtered.sort((a, b) => Number(b.price || 0) - Number(a.price || 0));
+        } else if (state.sort === 'price_asc') {
+            filtered.sort((a, b) => Number(a.price || 0) - Number(b.price || 0));
+        } else {
+            filtered.sort((a, b) => gradeRank(a.grade) - gradeRank(b.grade) || Number(b.price || 0) - Number(a.price || 0));
+        }
 
-        // 自动轮播
-        setInterval(() => {
-            currentIndex = (currentIndex + 1) % slides.length;
-            showSlide(currentIndex);
-        }, 5000); // 每5秒切换一次
-    });
-</script>
-<script>
-    // 获取搜索输入框和按钮的DOM元素
-    const searchInput = document.getElementById('searchInput');
-    const searchButton = document.getElementById('searchButton');
+        meta.textContent = `共 ${filtered.length} 张卡片`;
+        grid.innerHTML = '';
 
-    // 定义一个函数来处理搜索请求
-    function handleSearch() {
-        // 获取用户输入的搜索关键词
-        const searchQuery = searchInput.value;
-        // 检查搜索关键词是否为空
-        if (searchQuery.trim() === '') {
-            alert('请输入搜索内容');
+        if (!filtered.length) {
+            grid.innerHTML = `
+                <div class="empty-state">
+                    <h3>暂无符合条件的卡片</h3>
+                    <p>可以切换其他战队或评级条件继续浏览。</p>
+                    <button type="button" class="quiet-btn quiet-btn-outline quiet-btn-sm" id="resetCatalogBtn">重置筛选</button>
+                </div>
+            `;
+            document.getElementById('resetCatalogBtn').addEventListener('click', () => {
+                state.team = 'ALL';
+                state.grade = 'ALL';
+                document.querySelectorAll('#teamTabs .quiet-tab').forEach(b => b.classList.toggle('active', b.dataset.team === 'ALL'));
+                document.querySelectorAll('#gradeTabs .quiet-tab').forEach(b => b.classList.toggle('active', b.dataset.grade === 'ALL'));
+                renderCatalog();
+            });
             return;
         }
-        // 使用fetch API向后端发送请求
-        fetch(`card/search_by_team?team=${encodeURIComponent(searchQuery)}`, {
-            method: 'GET', // 使用GET请求
-        })
-            .then(response => response.json())
-            .then(data => {
-                sessionStorage.setItem('searchData', JSON.stringify(data)); // 存储数据
-                window.location.href = 'search.html';
-            })
-            .catch((error) => {
-                // 处理请求错误
-                console.error('Error:', error);
-            });
+
+        const frag = document.createDocumentFragment();
+        filtered.forEach(card => frag.appendChild(LPLVault.createTradingCardElement(card)));
+        grid.appendChild(frag);
     }
 
-    // 为搜索按钮添加点击事件监听器
-    searchButton.addEventListener('click', handleSearch);
-
-    // 如果你希望在用户按下回车键时也触发搜索，可以添加以下代码
-    searchInput.addEventListener('keypress', function(event) {
-        if (event.key === 'Enter') {
-            handleSearch();
-        }
+    document.querySelectorAll('#gradeTabs .quiet-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+            state.grade = btn.dataset.grade;
+            document.querySelectorAll('#gradeTabs .quiet-tab').forEach(b => b.classList.toggle('active', b === btn));
+            renderCatalog();
+        });
     });
+
+    document.getElementById('sortSelect').addEventListener('change', (e) => {
+        state.sort = e.target.value;
+        renderCatalog();
+    });
+
+    (async function init() {
+        try {
+            allCards = await LPLVault.fetchCardList({ sort: 'price_desc' });
+            document.getElementById('statTotalCards').textContent = allCards.length;
+            document.getElementById('statSGrade').textContent = allCards.filter(c => String(c.grade).toUpperCase() === 'S').length;
+            document.getElementById('statTeams').textContent = new Set(allCards.map(c => c.team).filter(Boolean)).size;
+            buildTeamTabs(allCards);
+            renderCatalog();
+        } catch (err) {
+            console.error(err);
+            LPLVault.showToast('加载卡片列表失败，请确认本地服务已运行', 'error');
+            document.getElementById('resultMeta').textContent = '加载失败';
+            document.getElementById('cardGrid').innerHTML = `
+                <div class="empty-state">
+                    <h3>暂时无法连接到服务器</h3>
+                    <p>请确认后端服务正在本地 8080 端口运行后刷新页面。</p>
+                </div>
+            `;
+        }
+    })();
 </script>
 </body>
 </html>

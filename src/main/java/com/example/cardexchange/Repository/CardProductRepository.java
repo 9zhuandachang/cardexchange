@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CardProductRepository extends JpaRepository<ProductCard, Long> {
-    @Query("SELECT pc.id FROM product_card pc ORDER BY pc.money DESC")
+public interface CardProductRepository extends JpaRepository<ProductCard, Integer> {
+    @Query("SELECT CAST(pc.id AS long) FROM ProductCard pc ORDER BY pc.money DESC")
     List<Long> findTop4CardIdsByMoney();
 }

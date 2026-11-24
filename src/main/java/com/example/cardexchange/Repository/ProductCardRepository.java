@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Repository
-public interface ProductCardRepository extends JpaRepository<ProductCard, Long> {
+public interface ProductCardRepository extends JpaRepository<ProductCard, Integer> {
     @Query("SELECT e FROM ProductCard e WHERE e.id = :id and e.userId = :userId")
     List<ProductCard> findByIdAndUserId(@Param("id") Integer id, @Param("userId") Long userId);
 
